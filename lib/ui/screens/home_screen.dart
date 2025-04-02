@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:date_format/date_format.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -27,11 +29,26 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    verifyUser().then((value) {
+      if (!value) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginPage(),
+          ),
+        );
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return DefaultTabController(
-      length: 12, // 12 abas, uma para cada mês
+      length: 12,
       child: Scaffold(
         appBar: AppBar(
           title: Column(
@@ -68,12 +85,20 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Icon(Iconsax.notification_copy),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+               logoutUser();
+               Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  ),
+               );
+              },
               icon: Icon(Iconsax.user_copy),
             ),
           ],
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(48), // Ajuste fino da altura
+            preferredSize: const Size.fromHeight(48),
             child: TabBar(
               isScrollable: true,
               tabs: months.map((month) => Tab(text: month)).toList(),
@@ -81,11 +106,33 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         body: TabBarView(
-          children: List.generate(12, (index) {
-            return Center(child: Text("Conteúdo de ${months[index]}"));
-          }),
+          children: List.generate(
+            12,
+            (index) {
+              return Center(
+                child: Text("Conteúdo de ${months[index]}"),
+              );
+            },
+          ),
         ),
       ),
     );
+  }
+
+  Future<void> logoutUser() async {
+    SharedPreferences _sharedPreferences = await SharedPreferences.getInstance();
+    await _sharedPreferences.remove("token");
+  }
+
+  Future<bool> verifyUser() async {
+    SharedPreferences _sharedPreferences = await SharedPreferences.getInstance();
+
+    String? token = _sharedPreferences.getString("token");
+
+    if (token == null) {
+      return false;
+    } else {
+      return true;
+    }
   }
 }
