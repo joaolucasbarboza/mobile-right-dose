@@ -1,7 +1,7 @@
 class Medicine {
   int? medicineId;
   String name;
-  String? description;
+  String description;
   int quantity;
   String unit;
   DateTime createdAt;
@@ -9,7 +9,7 @@ class Medicine {
   Medicine({
     this.medicineId,
     required this.name,
-    this.description,
+    required this.description,
     required this.quantity,
     required this.unit,
     required this.createdAt,
@@ -17,11 +17,14 @@ class Medicine {
 
   factory Medicine.fromMap(Map<String, dynamic> map) {
     return Medicine(
+      medicineId: map['id'],
       name: map['name'],
       description: map['description'],
       quantity: map['quantity'],
       unit: map['unit'],
-      createdAt: map['createdAt'] != null ? DateTime.parse(map['createdAt']) : DateTime.now(),
+      createdAt: map['createdAt'] != null
+          ? DateTime.parse(map['createdAt'])
+          : DateTime.now(),
     );
   }
 

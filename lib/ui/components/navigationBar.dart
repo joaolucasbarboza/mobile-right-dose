@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:tcc/ui/screens/prescription_screen.dart';
 import 'package:tcc/ui/screens/setting_screen.dart';
 
@@ -28,10 +27,6 @@ class _NavigationComponentState extends State<NavigationComponent> {
     return Scaffold(
       body: pages[currentPageIndex],
       bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(32),
-          topRight: Radius.circular(32),
-        ),
         child: NavigationBar(
           height: 60,
           labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
@@ -40,23 +35,26 @@ class _NavigationComponentState extends State<NavigationComponent> {
               currentPageIndex = index;
             });
           },
-          indicatorColor: Colors.lightGreen,
           selectedIndex: currentPageIndex,
           destinations: const <Widget>[
             NavigationDestination(
-              icon: Icon(Iconsax.home_copy),
+              icon: Icon(Icons.home_outlined),
+              selectedIcon: Icon(Icons.home_rounded),
               label: 'Home',
             ),
             NavigationDestination(
-              icon: Icon(Iconsax.calendar_1_copy),
+              icon: Icon(Icons.calendar_month_outlined),
+              selectedIcon: Icon(Icons.calendar_month_rounded),
               label: 'Prescription',
             ),
             NavigationDestination(
-              icon: Icon((Iconsax.layer_copy)),
+              icon: Icon(Icons.medication_outlined),
+              selectedIcon: Icon(Icons.medication_rounded),
               label: 'Medicine',
             ),
             NavigationDestination(
-              icon: Icon(Iconsax.setting_2_copy),
+              icon: Icon(Icons.settings_outlined),
+              selectedIcon: Icon(Icons.settings_rounded),
               label: 'Setting',
             ),
           ],

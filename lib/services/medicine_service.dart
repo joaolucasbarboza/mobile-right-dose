@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:tcc/models/medicine.dart';
 import 'package:tcc/services/auth_service.dart';
 import 'package:tcc/utils/constants.dart';
 import 'package:http/http.dart' as http;
@@ -42,6 +43,25 @@ class MedicineService {
 
     if (response.statusCode != 201) {
       throw Exception("Erro ao adicionar medicamento");
+    }
+  }
+
+  Future<Medicine> getMedicineById(int id) async {
+    final getToken = await _authService.getToken();
+
+    final response = await http.get(
+      Uri.parse("${AppConstants.getMedicine}/$id"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $getToken",
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return Medicine.fromMap(data);
+    } else {
+      throw Exception("Erro ao buscar medicamento");
     }
   }
 }

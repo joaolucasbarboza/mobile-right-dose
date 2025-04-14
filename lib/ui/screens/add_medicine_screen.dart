@@ -1,6 +1,5 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:tcc/services/medicine_service.dart';
 import 'package:tcc/utils/custom_input_decoration.dart';
 import 'package:tcc/utils/custom_text_style.dart';
@@ -69,7 +68,7 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Nome", style: customTextStyle()),
+              Text("Nome", style: customTextLabel()),
               TextFormField(
                 controller: _nameController,
                 decoration: customInputDecoration("Nome"),
@@ -83,7 +82,7 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
               const SizedBox(height: 16),
               Text(
                 "Descrição (opcional)",
-                style: customTextStyle(),
+                style: customTextLabel(),
               ),
               TextFormField(
                 controller: _descriptionController,
@@ -92,7 +91,7 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
               const SizedBox(height: 16),
               Text(
                 "Quantidade em estoque",
-                style: customTextStyle(),
+                style: customTextLabel(),
               ),
               Row(
                 children: [
@@ -113,17 +112,17 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                     ),
                   ),
                   IconButton.filledTonal(
-                    icon: const Icon(Iconsax.minus_copy),
+                    icon: const Icon(Icons.minimize_rounded),
                     onPressed: _decrementQuantity,
                   ),
                   IconButton.filledTonal(
-                    icon: const Icon(Iconsax.add_copy),
+                    icon: const Icon(Icons.add_rounded),
                     onPressed: _incrementQuantity,
                   ),
                 ],
               ),
               const SizedBox(height: 16),
-              Text("Unidade", style: customTextStyle()),
+              Text("Unidade", style: customTextLabel()),
               DropdownButtonFormField2<String>(
                 isExpanded: true,
                 decoration: customInputDecoration(""),

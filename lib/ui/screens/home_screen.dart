@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:date_format/date_format.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'login_screen.dart';
@@ -78,11 +77,11 @@ class _HomeScreenState extends State<HomeScreen> {
           actions: [
             IconButton(
               onPressed: () {},
-              icon: Icon(Iconsax.search_normal_1_copy),
+              icon: Icon(Icons.search_rounded),
             ),
             IconButton(
               onPressed: () {},
-              icon: Icon(Iconsax.notification_copy),
+              icon: Icon(Icons.notifications_none_rounded),
             ),
             IconButton(
               onPressed: () {
@@ -94,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                );
               },
-              icon: Icon(Iconsax.user_copy),
+              icon: Icon(Icons.account_circle_rounded),
             ),
           ],
           bottom: PreferredSize(
