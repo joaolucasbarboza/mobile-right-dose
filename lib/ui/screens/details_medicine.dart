@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:tcc/models/medicine.dart';
 import 'package:tcc/services/medicine_service.dart';
 import 'package:tcc/utils/custom_text_style.dart';
@@ -40,8 +41,6 @@ class _DetailsMedicineState extends State<DetailsMedicine> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 16),
-                    Text("Nome"),
                     Text(
                       medicine!.name,
                       style: TextStyle(
@@ -58,21 +57,27 @@ class _DetailsMedicineState extends State<DetailsMedicine> {
                       style: customTextLabel(),
                     ),
                     SizedBox(height: 16),
-                    Text("Quantidade"),
+                    Text("Quantidade em estoque"),
                     Text(
-                      medicine!.quantity.toString(),
-                      style: customTextLabel(),
+                      "${medicine!.quantity.toString()} ${medicine!.unit}",
+                      style: customTextSubtitle(medicine!.quantity),
                     ),
                     SizedBox(height: 16),
-                    Text("Unidade"),
+                    Text("Dosagem por unidade"),
                     Text(
-                      medicine!.unit,
+                      "${medicine!.dosagePerUnit!.dosageAmount.toString()} ${medicine!.dosagePerUnit!.dosageUnit}",
                       style: customTextLabel(),
                     ),
                     SizedBox(height: 16),
                     Text("Data de criação"),
                     Text(
-                      medicine!.createdAt.toString(),
+                      DateFormat('dd/MM/yyyy').format(medicine!.createdAt),
+                      style: customTextLabel(),
+                    ),
+                    SizedBox(height: 16),
+                    Text("Data da ultima atualização"),
+                    Text(
+                      DateFormat('dd/MM/yyyy').format(medicine!.updatedAt!),
                       style: customTextLabel(),
                     ),
                     SizedBox(height: 16),
@@ -129,6 +134,4 @@ class _DetailsMedicineState extends State<DetailsMedicine> {
       });
     }
   }
-
-  
 }
