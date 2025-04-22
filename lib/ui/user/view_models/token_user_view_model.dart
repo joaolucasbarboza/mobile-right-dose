@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class UserProvider with ChangeNotifier {
+class TokenUserViewModel with ChangeNotifier {
   String? _token;
 
   String? get token => _token;

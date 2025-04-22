@@ -6,6 +6,7 @@ import 'package:tcc/data/services/prescription_service.dart';
 import 'package:tcc/ui/core/navigationBar.dart';
 import 'package:tcc/ui/medicine/view_models/get_all_medicine_view_model.dart';
 import 'package:tcc/ui/prescription/view_models/get_all_prescription_view_model.dart';
+import 'package:tcc/ui/user/view_models/login_user_view_model.dart';
 import 'package:tcc/ui/user/widgets/login_screen.dart';
 import 'package:tcc/utils/navigator_service.dart';
 
@@ -22,10 +23,11 @@ void main() {
         ),
         ChangeNotifierProvider<GetAllMedicineViewModel>(
           create: (context) => GetAllMedicineViewModel(
-            MedicineService(
-              AuthService()
-            ),
+            MedicineService(AuthService()),
           ),
+        ),
+        ChangeNotifierProvider<LoginUserViewModel>(
+          create: (context) => LoginUserViewModel(AuthService()),
         )
       ],
       child: MyApp(),

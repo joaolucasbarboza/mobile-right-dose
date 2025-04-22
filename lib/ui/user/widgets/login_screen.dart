@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tcc/data/services/auth_service.dart';
-import 'package:tcc/ui/core/navigationBar.dart';
+import 'package:provider/provider.dart';
+import 'package:tcc/ui/user/view_models/login_user_view_model.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,26 +10,21 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _authService = AuthService();
-  bool _isObscure = true;
-  bool _isLoading = false;
-
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<LoginUserViewModel>(context);
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16),
           child: Form(
-            key: _formKey,
+            key: provider.formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                Text("Entrar"),
                 TextFormField(
-                  controller: _emailController,
+                  controller: provider.emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     label: Text("E-mail"),
@@ -45,9 +40,9 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 SizedBox(height: 16),
                 TextFormField(
-                  controller: _passwordController,
+                  controller: provider.passwordController,
                   keyboardType: TextInputType.visiblePassword,
-                  obscureText: _isObscure,
+                  obscureText: provider.isObscure,
                   decoration: InputDecoration(
                     label: Text("Senha"),
                     hintText: "Digite sua senha",
@@ -55,10 +50,10 @@ class _LoginPageState extends State<LoginPage> {
                     suffixIcon: IconButton(
                       onPressed: () {
                         setState(() {
-                          _isObscure = !_isObscure;
+                          provider.isObscure = !provider.isObscure;
                         });
                       },
-                      icon: _isObscure
+                      icon: provider.isObscure
                           ? Icon(Icons.remove_red_eye_rounded)
                           : Icon(Icons.remove_red_eye_outlined),
                     ),
@@ -72,8 +67,10 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 SizedBox(height: 24),
                 ElevatedButton(
-                  onPressed: _isLoading ? null : _login,
-                  child: _isLoading
+                  onPressed: () => {
+                    provider.login(context)
+                  },
+                  child: provider.isLoading
                       ? CircularProgressIndicator(color: Colors.redAccent)
                       : Text("Entrar"),
                 ),
@@ -83,43 +80,5 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-
-  Future<void> _login() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isLoading = true;
-      });
-
-      try {
-        final token = await _authService.login(
-          _emailController.text,
-          _passwordController.text,
-        );
-
-        if (token != null) {
-          await _authService.saveToken(token);
-
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => NavigationComponent(),
-            ),
-          );
-        }
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.redAccent,
-            content: Text(e.toString()),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
   }
 }
