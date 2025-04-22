@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tcc/exceptions/invalid_credentials_exception.dart';
 
-import '../utils/constants.dart';
+import '../../utils/routes.dart';
 
 class AuthService {
-  final String authLogin = AppConstants.authLogin;
+  final String authLogin = Routes.authLogin;
 
   Future<String?> login(String email, String password) async {
     final response = await http.post(
@@ -24,7 +23,7 @@ class AuthService {
       final data = jsonDecode(response.body);
       return data["token"];
     } else if (response.statusCode == 401) {
-      throw InvalidCredentialsException(
+      throw Exception(
           "E-mail ou senha inválidos. Tente novamente!");
     } else {
       throw Exception("Erro ao fazer login");

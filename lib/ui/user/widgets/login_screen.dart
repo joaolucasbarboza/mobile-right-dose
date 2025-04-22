@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tcc/exceptions/invalid_credentials_exception.dart';
-import 'package:tcc/services/auth_service.dart';
-import 'package:tcc/ui/components/navigationBar.dart';
+import 'package:tcc/data/services/auth_service.dart';
+import 'package:tcc/ui/core/navigationBar.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -108,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           );
         }
-      } on InvalidCredentialsException catch (e) {
+      } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.redAccent,

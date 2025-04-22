@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tcc/models/medicine.dart';
-import 'package:tcc/services/medicine_service.dart';
 import 'package:tcc/utils/custom_text_style.dart';
 
-class DetailsMedicine extends StatefulWidget {
+class DetailsMedicineScreen extends StatefulWidget {
   final int? medicineId;
 
-  const DetailsMedicine({super.key, required this.medicineId});
+  const DetailsMedicineScreen({super.key, required this.medicineId});
 
   @override
-  State<DetailsMedicine> createState() => _DetailsMedicineState();
+  State<DetailsMedicineScreen> createState() => _DetailsMedicineScreenState();
 }
 
-class _DetailsMedicineState extends State<DetailsMedicine> {
-  final _medicineService = MedicineService();
+class _DetailsMedicineScreenState extends State<DetailsMedicineScreen> {
+  // final _medicineService = MedicineService();
   Medicine? medicine;
   bool isLoading = true;
 
@@ -122,12 +121,12 @@ class _DetailsMedicineState extends State<DetailsMedicine> {
     });
 
     try {
-      Medicine medicine = await _medicineService.getMedicineById(medicineId!);
+      // Medicine medicine = await _medicineService.getMedicineById(medicineId!);
       setState(() {
         this.medicine = medicine;
       });
 
-      print(medicine.toMap());
+      // print(medicine.toJson());
     } finally {
       setState(() {
         isLoading = false;
