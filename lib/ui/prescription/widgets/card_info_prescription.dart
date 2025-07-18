@@ -3,12 +3,14 @@ import 'package:tcc/utils/custom_text_style.dart';
 
 class CardInfoPrescription extends StatelessWidget {
   final Icon icon;
+  final Color color;
   final String primaryLabel;
   final String secondaryLabel;
 
   const CardInfoPrescription({
     super.key,
     required this.icon,
+    required this.color,
     required this.primaryLabel,
     required this.secondaryLabel,
   });
@@ -16,8 +18,12 @@ class CardInfoPrescription extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Card.filled(
-        color: Colors.grey.shade200,
+      child: Card.outlined(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: color),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        color: color.withOpacity(0.2),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(
@@ -25,7 +31,6 @@ class CardInfoPrescription extends StatelessWidget {
             children: [
               icon,
               Expanded(
-                // <- Aqui está a chave pra evitar overflow
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -39,7 +44,7 @@ class CardInfoPrescription extends StatelessWidget {
                       secondaryLabel,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
-                      style: customTextLabel(),
+                      style: customTextLabelPrimary(),
                     ),
                   ],
                 ),

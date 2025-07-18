@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:tcc/data/services/auth_service.dart';
 import 'package:tcc/data/services/medicine_service.dart';
 import 'package:tcc/utils/custom_input_decoration.dart';
 import 'package:tcc/utils/custom_text_style.dart';
@@ -12,12 +13,12 @@ class AddMedicineScreen extends StatefulWidget {
 }
 
 class _AddMedicineScreenState extends State<AddMedicineScreen> {
+  String? _selectedUnit;
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
-  String? _selectedUnit;
   final _quantityController = TextEditingController(text: "1");
   final _descriptionController = TextEditingController();
-  // final _medicineService = MedicineService();
+  final _medicineService = MedicineService(AuthService());
   bool isLoading = false;
 
   final Map<String, String> _units = {
@@ -224,7 +225,7 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
           ),
         );
 
-        // await _medicineService.addMedicine(medicine);
+        await _medicineService.addMedicine(medicine);
         Navigator.pop(context);
 
         Future.delayed(

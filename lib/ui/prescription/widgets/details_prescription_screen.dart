@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tcc/models/prescription.dart';
 import 'package:tcc/ui/prescription/widgets/text_details_prescription_component.dart';
+import 'package:tcc/utils/custom_text_style.dart';
 
 class DetailsPrescriptionScreen extends StatefulWidget {
   final Prescription prescription;
@@ -17,8 +18,28 @@ class _DetailsPrescriptionScreenState extends State<DetailsPrescriptionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Voltar"),
-        centerTitle: false,
+        actions: [
+          PopupMenuButton(
+            elevation: 1,
+            icon: Icon(Icons.more_vert),
+            itemBuilder: (BuildContext context) => [
+              PopupMenuItem(
+                child: ListTile(
+                  leading: Icon(Icons.edit_outlined),
+                  title: Text("Editar"),
+                ),
+                onTap: () {},
+              ),
+              PopupMenuItem(
+                child: ListTile(
+                  leading: Icon(Icons.delete_outlined),
+                  title: Text("Excluir"),
+                ),
+                onTap: () {},
+              ),
+            ],
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -29,38 +50,6 @@ class _DetailsPrescriptionScreenState extends State<DetailsPrescriptionScreen> {
             TextDetailsPrescriptionComponent(
               prescription: widget.prescription,
             ),
-            Column(
-              spacing: 8,
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: FilledButton.tonalIcon(
-                    icon: Icon(
-                      Icons.edit_outlined,
-                      size: 24,
-                    ),
-                    label: Text("Editar"),
-                    onPressed: () {},
-                  ),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: FilledButton.icon(
-                    icon: Icon(
-                      Icons.delete_outlined,
-                      size: 24,
-                    ),
-                    label: Text("Excluir"),
-                    style: FilledButton.styleFrom(
-                      backgroundColor: Colors.red,
-                    ),
-                    onPressed: () {},
-                  ),
-                ),
-              ],
-            )
           ],
         ),
       ),

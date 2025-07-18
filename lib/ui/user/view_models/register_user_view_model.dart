@@ -1,32 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:tcc/data/services/auth_service.dart';
 
-class LoginUserViewModel with ChangeNotifier {
+class RegisterUserViewModel with ChangeNotifier {
   final AuthService authService;
 
-  LoginUserViewModel(this.authService);
+  RegisterUserViewModel(this.authService);
 
   final formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  bool isObscure = true;
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   bool isLoading = false;
 
-  Future<void> login(BuildContext context) async {
+  Future<void> registerUser(BuildContext context) async {
     if (formKey.currentState!.validate()) {
       isLoading = true;
       notifyListeners();
 
       try {
-        final token = await authService.login(
+        final token = await authService.register(
+          nameController.text,
           emailController.text,
           passwordController.text,
         );
 
         if (token != null) {
-          await authService.saveToken(token);
-
-          Navigator.pushReplacementNamed(context, '/home');
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/home',
+            (route) => false,
+          );
 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -40,7 +43,7 @@ class LoginUserViewModel with ChangeNotifier {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    'Login realizado com sucesso!',
+                    'Conta criada com sucesso!',
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -52,7 +55,6 @@ class LoginUserViewModel with ChangeNotifier {
           );
         }
       } catch (e) {
-        print(e);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.redAccent,

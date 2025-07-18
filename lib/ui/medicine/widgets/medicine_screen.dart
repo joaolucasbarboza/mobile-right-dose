@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tcc/models/medicine.dart';
-import 'package:tcc/data/services/medicine_service.dart';
 import 'package:tcc/ui/core/medicine_card_component.dart';
 import 'package:tcc/ui/medicine/view_models/get_all_medicine_view_model.dart';
 import 'package:tcc/ui/medicine/widgets/add_medicine_screen.dart';
@@ -15,16 +13,13 @@ class MedicineScreen extends StatefulWidget {
 }
 
 class _MedicineScreenState extends State<MedicineScreen> {
-
   @override
   void initState() {
     super.initState();
-    Future.microtask(
-        () => Provider.of<GetAllMedicineViewModel>(
+    Future.microtask(() => Provider.of<GetAllMedicineViewModel>(
           context,
           listen: false,
-        ).fetchMedicines()
-    );
+        ).fetchMedicines());
   }
 
   @override
@@ -85,7 +80,8 @@ class _MedicineScreenState extends State<MedicineScreen> {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => DetailsMedicineScreen(
-                                      medicineId: medicine.medicineId),
+                                    medicine: medicine,
+                                  ),
                                 ),
                               );
                             },

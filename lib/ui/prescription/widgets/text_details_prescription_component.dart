@@ -26,7 +26,6 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
     final String instructions = prescription.instructions.toString();
     final bool wantsNotifications = prescription.wantsNotifications;
     final String medicineName = prescription.medicine.name;
-    final String medicineDescription = prescription.medicine.description;
     final String medicineDosageAmount =
         prescription.medicine.dosagePerUnit?.dosageAmount.toString() ?? '-';
     final String medicineDosageUnit =
@@ -34,44 +33,64 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
     final String medicineUnit = prescription.medicine.unit;
 
     return Column(
+      spacing: 10,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          medicineName,
-          style: customTextTitle(),
-        ),
-        Text(
-          "$medicineDosageAmount $medicineDosageUnit",
-          style: TextStyle(color: Colors.black87),
-        ),
-        SizedBox(height: 8),
         Row(
+          spacing: 8,
           children: [
-            CardInfoPrescription(
-              icon: Icon(Icons.medication_rounded),
-              primaryLabel: "Tomar",
-              secondaryLabel:
-                  '${prescription.dosageAmount} ${prescription.dosageUnit}',
+            Text(
+              medicineName,
+              style: customTextTitle(),
             ),
-            CardInfoPrescription(
-              icon: Icon(Icons.access_time_outlined),
-              primaryLabel: "Intervalo",
-              secondaryLabel:
-                  '${prescription.frequency} ${prescription.uomFrequency}',
+            Icon(
+              Icons.circle,
+              size: 6,
+            ),
+            Text(
+              "$medicineDosageAmount $medicineDosageUnit",
+              style: TextStyle(color: Colors.black87),
             ),
           ],
         ),
-        Divider(),
-        Text("Duração: $totalDays dias"),
-        Text("Período: $startDate até $endDate"),
-        Divider(),
-        Text("Instruções Adicionais:"),
+        Row(
+          children: [
+            CardInfoPrescription(
+              icon: Icon(Icons.medication_rounded, color: Colors.amber, size: 36,),
+              color: Colors.amber,
+              primaryLabel: "Tomar",
+              secondaryLabel:
+                  '$dosageAmount $dosageUnit',
+            ),
+            CardInfoPrescription(
+              icon: Icon(Icons.access_time_outlined, color: Colors.deepPurpleAccent, size: 36,),
+              color: Colors.deepPurpleAccent,
+              primaryLabel: "Intervalo",
+              secondaryLabel:
+                  '$frequency $uomFrequency',
+            ),
+          ],
+        ),
+        Text("Instruções de uso", style: customTextLabelPrimary(),),
         Text(instructions.isNotEmpty
             ? instructions
             : "Nenhuma instrução adicional."),
         Divider(),
-        Text(
-            "Notificações: ${wantsNotifications ? "Ativadas" : "Desativadas"}"),
+        Text("Detalhes", style: customTextLabelPrimary(),),
+        Text("Tomar a medicação por $totalDays dias"),
+        Text("Período: $startDate até $endDate"),
+        Divider(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("Notificações", style: customTextLabelPrimary(),),
+            Switch(
+              activeColor: Colors.green,
+              value: wantsNotifications,
+              onChanged: (value) {},
+            ),
+          ],
+        )
       ],
     );
   }

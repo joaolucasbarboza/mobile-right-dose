@@ -10,7 +10,7 @@ class CustomHttpClient extends http.BaseClient {
 
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
-    final token = await _authService.getToken();
+    final token = _authService.token;
 
     if (token != null) {
       request.headers['Authorization'] = 'Bearer $token';

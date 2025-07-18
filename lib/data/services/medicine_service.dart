@@ -16,8 +16,9 @@ class MedicineService implements MedicineRepository {
 
   @override
   Future<void> addMedicine(Map<String, dynamic> medicine) async {
-    final response = await _httpClient.post(Uri.parse(getMedicineUrl),
-        body: jsonEncode(medicine));
+    final response = await _httpClient.post(
+      Uri.parse(getMedicineUrl),
+      body: jsonEncode(medicine));
 
     if (response.statusCode != 201) {
       throw Exception("Erro ao adicionar medicamento");
