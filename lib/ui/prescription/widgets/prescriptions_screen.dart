@@ -63,7 +63,7 @@ class _PrescriptionScreenState extends State<PrescriptionsScreen> {
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey.shade300),
                           borderRadius: BorderRadius.circular(12),
-                          color: Colors.white, // se quiser fundo branco
+                          color: Colors.white,
                         ),
                         child: ListTile(
                           onTap: () {

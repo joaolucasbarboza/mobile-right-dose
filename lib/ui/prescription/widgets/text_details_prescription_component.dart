@@ -56,34 +56,49 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
         Row(
           children: [
             CardInfoPrescription(
-              icon: Icon(Icons.medication_rounded, color: Colors.amber, size: 36,),
+              icon: Icon(
+                Icons.medication_rounded,
+                color: Colors.amber,
+                size: 36,
+              ),
               color: Colors.amber,
               primaryLabel: "Tomar",
-              secondaryLabel:
-                  '$dosageAmount $dosageUnit',
+              secondaryLabel: '$dosageAmount $dosageUnit',
             ),
             CardInfoPrescription(
-              icon: Icon(Icons.access_time_outlined, color: Colors.deepPurpleAccent, size: 36,),
+              icon: Icon(
+                Icons.access_time_outlined,
+                color: Colors.deepPurpleAccent,
+                size: 36,
+              ),
               color: Colors.deepPurpleAccent,
               primaryLabel: "Intervalo",
-              secondaryLabel:
-                  '$frequency $uomFrequency',
+              secondaryLabel: '$frequency $uomFrequency',
             ),
           ],
         ),
-        Text("Instruções de uso", style: customTextLabelPrimary(),),
+        Text(
+          "Instruções de uso",
+          style: customTextLabelPrimary(),
+        ),
         Text(instructions.isNotEmpty
             ? instructions
             : "Nenhuma instrução adicional."),
         Divider(),
-        Text("Detalhes", style: customTextLabelPrimary(),),
+        Text(
+          "Detalhes",
+          style: customTextLabelPrimary(),
+        ),
         Text("Tomar a medicação por $totalDays dias"),
         Text("Período: $startDate até $endDate"),
         Divider(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Notificações", style: customTextLabelPrimary(),),
+            Text(
+              "Notificações",
+              style: customTextLabelPrimary(),
+            ),
             Switch(
               activeColor: Colors.green,
               value: wantsNotifications,
