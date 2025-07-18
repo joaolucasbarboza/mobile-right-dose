@@ -39,7 +39,7 @@ class Medicine {
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'medicine_id': medicineId,
       'name': name,

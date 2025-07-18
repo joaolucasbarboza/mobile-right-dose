@@ -8,7 +8,7 @@ TextStyle customTextLabel() {
   return TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w500,
-    color: Colors.grey,
+    color: Colors.grey.shade600,
   );
 }
 
@@ -16,7 +16,7 @@ TextStyle customTextLabelPrimary() {
   return TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.bold,
-    color: Colors.grey.shade600,
+    color: Colors.black87,
   );
 }
 
@@ -30,7 +30,7 @@ TextStyle customTextSubtitle(int quantity) {
 
 TextStyle customTextTitle() {
   return TextStyle(
-    fontSize: 26,
+    fontSize: 30,
     fontWeight: FontWeight.w600,
     color: Colors.black,
   );

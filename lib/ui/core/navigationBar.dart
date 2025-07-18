@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tcc/ui/screens/prescription_screen.dart';
-import 'package:tcc/ui/screens/setting_screen.dart';
+import 'package:tcc/ui/prescription/widgets/prescriptions_screen.dart';
+import 'package:tcc/ui/core/setting_screen.dart';
 
-import '../screens/home_screen.dart';
-import '../screens/stock_screen.dart';
+import 'home_screen.dart';
+import '../medicine/widgets/medicine_screen.dart';
 
 class NavigationComponent extends StatefulWidget {
   const NavigationComponent({super.key});
@@ -17,7 +17,7 @@ class _NavigationComponentState extends State<NavigationComponent> {
 
   final List<Widget> pages = [
     const HomeScreen(),
-    const PrescriptionScreen(),
+    const PrescriptionsScreen(),
     const MedicineScreen(),
     const SettingScreen(),
   ];
@@ -29,7 +29,7 @@ class _NavigationComponentState extends State<NavigationComponent> {
       bottomNavigationBar: ClipRRect(
         child: NavigationBar(
           height: 60,
-          labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
           onDestinationSelected: (int index) {
             setState(() {
               currentPageIndex = index;
@@ -40,22 +40,22 @@ class _NavigationComponentState extends State<NavigationComponent> {
             NavigationDestination(
               icon: Icon(Icons.home_outlined),
               selectedIcon: Icon(Icons.home_rounded),
-              label: 'Home',
+              label: 'Inicio',
             ),
             NavigationDestination(
               icon: Icon(Icons.calendar_month_outlined),
               selectedIcon: Icon(Icons.calendar_month_rounded),
-              label: 'Prescription',
+              label: 'Prescrições',
             ),
             NavigationDestination(
               icon: Icon(Icons.medication_outlined),
               selectedIcon: Icon(Icons.medication_rounded),
-              label: 'Medicine',
+              label: 'Remédios',
             ),
             NavigationDestination(
               icon: Icon(Icons.settings_outlined),
               selectedIcon: Icon(Icons.settings_rounded),
-              label: 'Setting',
+              label: 'Configurações',
             ),
           ],
         ),

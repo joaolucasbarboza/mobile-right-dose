@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'login_screen.dart';
+import '../user/widgets/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
