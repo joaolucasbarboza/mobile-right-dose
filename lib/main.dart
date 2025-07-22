@@ -7,6 +7,7 @@ import 'package:tcc/data/services/notification_service.dart';
 import 'package:tcc/data/services/prescription_service.dart';
 import 'package:tcc/ui/core/navigationBar.dart';
 import 'package:tcc/ui/medicine/view_models/get_all_medicine_view_model.dart';
+import 'package:tcc/ui/prescription/view_models/add_prescription_view_model.dart';
 import 'package:tcc/ui/prescription/view_models/get_all_prescription_view_model.dart';
 import 'package:tcc/ui/user/view_models/login_user_view_model.dart';
 import 'package:tcc/ui/user/view_models/register_user_view_model.dart';
@@ -55,6 +56,13 @@ void main() async {
         ChangeNotifierProvider<RegisterUserViewModel>(
           create: (context) => RegisterUserViewModel(
             context.read<AuthService>(),
+          ),
+        ),
+        ChangeNotifierProvider<AddPrescriptionViewModel>(
+          create: (context) => AddPrescriptionViewModel(
+            PrescriptionService(
+              context.read<AuthService>(),
+            ),
           ),
         ),
       ],

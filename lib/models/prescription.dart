@@ -34,7 +34,7 @@ class Prescription {
       dosageAmount: map['dosageAmount'],
       dosageUnit: map['dosageUnit']?.toString() ?? '',
       frequency: map['frequency'],
-      uomFrequency: map['uomfrequency'],
+      uomFrequency: map['uomFrequency'],
       totalDays: map['totalDays'],
       startDate: DateTime.parse(map['startDate']),
       endDate: DateTime.parse(map['endDate'] ?? ''),

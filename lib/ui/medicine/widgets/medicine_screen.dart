@@ -71,10 +71,8 @@ class _MedicineScreenState extends State<MedicineScreen> {
                           return MedicineCardComponent(
                             backgroundColor: Colors.deepOrange.shade100,
                             colorIcon: Colors.deepOrange.shade400,
-                            id: medicine.medicineId,
+                            id: medicine.id,
                             name: medicine.name,
-                            unit: medicine.unit,
-                            quantity: medicine.quantity,
                             icon: Icons.medication,
                             onTap: () {
                               Navigator.of(context).push(

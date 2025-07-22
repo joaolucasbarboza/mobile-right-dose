@@ -1,4 +1,3 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:tcc/data/services/auth_service.dart';
 import 'package:tcc/data/services/medicine_service.dart';
@@ -13,32 +12,12 @@ class AddMedicineScreen extends StatefulWidget {
 }
 
 class _AddMedicineScreenState extends State<AddMedicineScreen> {
-  String? _selectedUnit;
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _quantityController = TextEditingController(text: "1");
   final _descriptionController = TextEditingController();
   final _medicineService = MedicineService(AuthService());
   bool isLoading = false;
-
-  final Map<String, String> _units = {
-    'MILLIGRAM': 'Miligrama',
-    'MICROGRAM': 'Micrograma',
-    'GRAM': 'Grama',
-    'KILOGRAM': 'Quilograma',
-    'MILLILITER': 'Mililitro',
-    'LITER': 'Litro',
-    'UNIT': 'Unidade',
-    'DROP': 'Gota',
-    'TABLET': 'Comprimido',
-    'CAPSULE': 'Cápsula',
-    'TEASPOON': 'Colher de chá',
-    'TABLESPOON': 'Colher de sopa',
-    'INHALATION': 'Inalação',
-    'PATCH': 'Adesivo',
-    'PUFF': 'Jato',
-    'DOSE': 'Dose'
-  };
 
   void _incrementQuantity() {
     setState(() {
@@ -123,51 +102,6 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                 ],
               ),
               const SizedBox(height: 16),
-              Text("Unidade", style: customTextLabel()),
-              DropdownButtonFormField2<String>(
-                isExpanded: true,
-                decoration: customInputDecoration(""),
-                hint: const Text(
-                  'Selecione a unidade',
-                  style: TextStyle(fontSize: 14),
-                ),
-                items: _units.entries
-                    .map(
-                      (item) => DropdownMenuItem<String>(
-                        value: item.key,
-                        child: Text(
-                          item.value,
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                      ),
-                    )
-                    .toList(),
-                validator: (value) =>
-                    value == null ? 'Selecione uma unidade.' : null,
-                onChanged: (value) {
-                  setState(() {
-                    _selectedUnit = value;
-                    print(value);
-                  });
-                },
-                onSaved: (value) {
-                  _selectedUnit = value;
-                },
-                iconStyleData: const IconStyleData(
-                  icon: Icon(
-                    Icons.arrow_drop_down,
-                    color: Colors.black45,
-                  ),
-                  iconSize: 24,
-                ),
-                dropdownStyleData: DropdownStyleData(
-                  maxHeight: 250,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -205,8 +139,6 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
       final Map<String, dynamic> medicine = {
         "name": _nameController.text.trim(),
         "description": _descriptionController.text.trim(),
-        "quantity": int.parse(_quantityController.text),
-        "unit": _selectedUnit,
       };
 
       try {

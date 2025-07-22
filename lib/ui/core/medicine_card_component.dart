@@ -4,8 +4,6 @@ import 'package:tcc/utils/custom_text_style.dart';
 class MedicineCardComponent extends StatelessWidget {
   final int? id;
   final String name;
-  final String unit;
-  final int quantity;
   final Color backgroundColor;
   final Color colorIcon;
   final IconData icon;
@@ -15,8 +13,6 @@ class MedicineCardComponent extends StatelessWidget {
     super.key,
     required this.id,
     required this.name,
-    required this.unit,
-    required this.quantity,
     required this.backgroundColor,
     required this.colorIcon,
     required this.icon,
@@ -59,14 +55,6 @@ class MedicineCardComponent extends StatelessWidget {
                     Text(
                       capitalizeFirstLetter(name),
                       style: customTextLabelPrimary(),
-                    ),
-                    Text(
-                      capitalizeFirstLetter(unit.toLowerCase()),
-                      style: customTextLabel(),
-                    ),
-                    Text(
-                      "$quantity em estoque",
-                      style: customTextSubtitle(quantity),
                     ),
                   ],
                 ),

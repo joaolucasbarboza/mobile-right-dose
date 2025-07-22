@@ -4,6 +4,7 @@ import 'package:tcc/ui/prescription/view_models/get_all_prescription_view_model.
 import 'package:tcc/ui/prescription/widgets/add_prescription_screen.dart';
 import 'package:tcc/ui/prescription/widgets/details_prescription_screen.dart';
 import 'package:tcc/utils/custom_text_style.dart';
+import 'package:tcc/utils/format_strings.dart';
 
 class PrescriptionsScreen extends StatefulWidget {
   const PrescriptionsScreen({super.key});
@@ -63,7 +64,7 @@ class _PrescriptionScreenState extends State<PrescriptionsScreen> {
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey.shade300),
                           borderRadius: BorderRadius.circular(12),
-                          color: Colors.white, // se quiser fundo branco
+                          color: Colors.white,
                         ),
                         child: ListTile(
                           onTap: () {
@@ -80,7 +81,7 @@ class _PrescriptionScreenState extends State<PrescriptionsScreen> {
                             style: customTextLabelPrimary(),
                           ),
                           subtitle: Text(
-                            "A cada ${prescription.frequency} ${prescription.uomFrequency.toLowerCase()} por ${prescription.totalDays} dias",
+                            "A cada ${prescription.frequency} ${formatUomFrequency(prescription.uomFrequency)} por ${prescription.totalDays} dias",
                             style: customTextLabel(),
                           ),
                         ),

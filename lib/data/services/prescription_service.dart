@@ -27,4 +27,22 @@ class PrescriptionService implements PrescriptionRepository {
       );
     }
   }
+
+  @override
+  Future<void> addPrescription(Map<String, dynamic> prescriptionData) async {
+    final String addPrescriptionUrl = Routes.addPrescription;
+
+    print('Adding prescription with data: $prescriptionData');
+
+    final response = await _httpClient.post(
+      Uri.parse(addPrescriptionUrl),
+      body: jsonEncode(prescriptionData),
+    );
+
+    if (response.statusCode != 201) {
+      throw Exception(
+        'Failed to add prescription: ${response.statusCode} - ${response.body}',
+      );
+    }
+  }
 }
