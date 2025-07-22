@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:tcc/models/prescription.dart';
 import 'package:tcc/ui/prescription/widgets/card_info_prescription.dart';
 import 'package:tcc/utils/custom_text_style.dart';
+import 'package:tcc/utils/format_strings.dart';
 
 class TextDetailsPrescriptionComponent extends StatelessWidget {
   final Prescription prescription;
@@ -26,11 +27,6 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
     final String instructions = prescription.instructions.toString();
     final bool wantsNotifications = prescription.wantsNotifications;
     final String medicineName = prescription.medicine.name;
-    final String medicineDosageAmount =
-        prescription.medicine.dosagePerUnit?.dosageAmount.toString() ?? '-';
-    final String medicineDosageUnit =
-        prescription.medicine.dosagePerUnit?.dosageUnit ?? '-';
-    final String medicineUnit = prescription.medicine.unit;
 
     return Column(
       spacing: 10,
@@ -43,37 +39,32 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
               medicineName,
               style: customTextTitle(),
             ),
-            Icon(
-              Icons.circle,
-              size: 6,
-            ),
-            Text(
-              "$medicineDosageAmount $medicineDosageUnit",
-              style: TextStyle(color: Colors.black87),
-            ),
           ],
         ),
-        Row(
+        Column(
           children: [
             CardInfoPrescription(
-              icon: Icon(
+              icon: const Icon(
                 Icons.medication_rounded,
                 color: Colors.amber,
                 size: 36,
               ),
               color: Colors.amber,
-              primaryLabel: "Tomar",
-              secondaryLabel: '$dosageAmount $dosageUnit',
+              primaryLabel: "Dosagem a ser tomada",
+              secondaryLabel: '$dosageAmount ${formatDosageUnit(dosageUnit)}'
             ),
+            const SizedBox(height: 12),
             CardInfoPrescription(
-              icon: Icon(
+              icon: const Icon(
                 Icons.access_time_outlined,
                 color: Colors.deepPurpleAccent,
                 size: 36,
               ),
               color: Colors.deepPurpleAccent,
               primaryLabel: "Intervalo",
-              secondaryLabel: '$frequency $uomFrequency',
+              secondaryLabel: uomFrequency == 'HOURLY'
+                  ? "A cada $frequency ${formatUomFrequency(uomFrequency)}"
+                  : "$frequency vez(es) ao dia",
             ),
           ],
         ),

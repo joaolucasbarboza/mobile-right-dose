@@ -1,23 +1,16 @@
 import 'package:intl/intl.dart';
-import 'package:tcc/models/dosage_per_unit.dart';
 
 class Medicine {
-  int? medicineId;
+  int? id;
   String name;
   String description;
-  int quantity;
-  String unit;
-  DosagePerUnit? dosagePerUnit;
   DateTime createdAt;
   DateTime? updatedAt;
 
   Medicine({
-    this.medicineId,
+    this.id,
     required this.name,
     required this.description,
-    required this.quantity,
-    required this.unit,
-    required this.dosagePerUnit,
     required this.createdAt,
     this.updatedAt,
   });
@@ -26,14 +19,9 @@ class Medicine {
 
   factory Medicine.fromMap(Map<String, dynamic> map) {
     return Medicine(
-      medicineId: map['id'],
+      id: map['id'],
       name: map['name'],
       description: map['description'],
-      quantity: map['quantity'],
-      unit: map['unit'],
-      dosagePerUnit: map['dosagePerUnit'] != null
-          ? DosagePerUnit.fromMap(map['dosagePerUnit'])
-          : null,
       createdAt: _dateFormat.parse(map['createdAt']),
       updatedAt: _dateFormat.parse(map['updatedAt']) 
     );
@@ -41,12 +29,9 @@ class Medicine {
 
   Map<String, dynamic> toJson() {
     return {
-      'medicine_id': medicineId,
+      'medicine_id': id,
       'name': name,
       'description': description,
-      'quantity': quantity,
-      'unit': unit,
-      'dosagePerUnit': dosagePerUnit?.toMap(),
     };
   }
 }

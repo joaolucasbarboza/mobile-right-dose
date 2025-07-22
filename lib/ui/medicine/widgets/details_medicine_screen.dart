@@ -42,18 +42,6 @@ class _DetailsMedicineScreenState extends State<DetailsMedicineScreen> {
                 style: customTextLabel(),
               ),
               SizedBox(height: 16),
-              Text("Quantidade em estoque"),
-              Text(
-                "${widget.medicine.quantity.toString()} ${widget.medicine.unit}",
-                style: customTextSubtitle(widget.medicine.quantity),
-              ),
-              SizedBox(height: 16),
-              Text("Dosagem por unidade"),
-              Text(
-                "${widget.medicine.dosagePerUnit!.dosageAmount.toString()} ${widget.medicine.dosagePerUnit!.dosageUnit}",
-                style: customTextLabel(),
-              ),
-              SizedBox(height: 16),
               Text("Data de criação"),
               Text(
                 DateFormat('dd/MM/yyyy').format(widget.medicine.createdAt),

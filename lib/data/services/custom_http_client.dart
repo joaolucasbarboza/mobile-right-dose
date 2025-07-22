@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'package:tcc/data/services/auth_service.dart';
-import 'package:tcc/utils/navigator_service.dart'; // Explicarei isso abaixo
+import 'package:tcc/utils/navigator_service.dart';
 
 class CustomHttpClient extends http.BaseClient {
   final http.Client _inner = http.Client();
