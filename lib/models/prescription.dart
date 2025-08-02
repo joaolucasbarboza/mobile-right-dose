@@ -1,4 +1,5 @@
 import 'package:tcc/models/medicine.dart';
+import 'package:tcc/models/prescription_notification.dart';
 
 class Prescription {
   int? id;
@@ -7,11 +8,13 @@ class Prescription {
   String dosageUnit;
   int frequency;
   String uomFrequency;
-  int totalDays;
+  bool indefinite;
+  int totalOccurrences;
   DateTime startDate;
   DateTime endDate;
   bool wantsNotifications;
   String? instructions;
+  List<PrescriptionNotification> notifications;
 
   Prescription({
     this.id,
@@ -20,11 +23,13 @@ class Prescription {
     required this.dosageUnit,
     required this.frequency,
     required this.uomFrequency,
-    required this.totalDays,
+    required this.indefinite,
+    required this.totalOccurrences,
     required this.startDate,
     required this.endDate,
     required this.wantsNotifications,
     this.instructions,
+    this.notifications = const [],
   });
 
   factory Prescription.fromMap(Map<String, dynamic> map) {
@@ -35,11 +40,16 @@ class Prescription {
       dosageUnit: map['dosageUnit']?.toString() ?? '',
       frequency: map['frequency'],
       uomFrequency: map['uomFrequency'],
-      totalDays: map['totalDays'],
+      indefinite: map['indefinite'] ?? false,
+      totalOccurrences: map['totalOccurrences'] ?? 0, // Corrigido aqui
       startDate: DateTime.parse(map['startDate']),
-      endDate: DateTime.parse(map['endDate'] ?? ''),
+      endDate: map['endDate'] != null ? DateTime.parse(map['endDate']) : DateTime.now(), // Corrigido aqui
       wantsNotifications: map['wantsNotifications'],
       instructions: map['instructions']?.toString() ?? '',
+      notifications: (map['notifications'] as List<dynamic>?)
+          ?.map((n) => PrescriptionNotification.fromMap(n as Map<String, dynamic>))
+          .toList() ??
+          [],
     );
   }
 
@@ -50,7 +60,7 @@ class Prescription {
       'dosageUnit': dosageUnit,
       'frequency': frequency,
       'uomFrequency': uomFrequency,
-      'totalDays': totalDays,
+      'totalOcurrences': totalOccurrences,
       'startDate': startDate.toIso8601String(),
       'wantsNotifications': wantsNotifications,
       'instructions': instructions,

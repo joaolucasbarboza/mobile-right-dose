@@ -81,7 +81,7 @@ class _PrescriptionScreenState extends State<PrescriptionsScreen> {
                             style: customTextLabelPrimary(),
                           ),
                           subtitle: Text(
-                            "A cada ${prescription.frequency} ${formatUomFrequency(prescription.uomFrequency)} por ${prescription.totalDays} dias",
+                            "A cada ${prescription.frequency} ${formatUomFrequency(prescription.uomFrequency)}, ${prescription.totalOccurrences} vezes",
                             style: customTextLabel(),
                           ),
                         ),

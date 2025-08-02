@@ -5,7 +5,6 @@ import 'package:tcc/ui/core/button_secondary_component.dart';
 import 'package:tcc/ui/user/view_models/login_user_view_model.dart';
 import 'package:tcc/ui/user/widgets/input_email_user.dart';
 import 'package:tcc/ui/user/widgets/input_password_user.dart';
-import 'package:tcc/utils/custom_text_style.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -55,6 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                             Text("Lembrar-me")
                           ],
                         ),
+
                         GestureDetector(
                           onTap: () {
                             Navigator.pushReplacementNamed(
@@ -69,9 +69,11 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
+
                       ],
                     ),
                     SizedBox(height: 24),
+
                     ButtonPrimaryComponent(
                       text: "Entrar",
                       isLoading: provider.isLoading,
@@ -79,9 +81,13 @@ class _LoginPageState extends State<LoginPage> {
                         provider.login(context);
                       },
                     ),
+
                     SizedBox(height: 18),
+
                     Text("Não tem uma conta?"),
+
                     SizedBox(height: 6),
+
                     ButtonSecondaryComponent(
                       text: "Criar conta",
                       isLoading: false,
@@ -92,6 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                         );
                       },
                     )
+
                   ],
                 ),
               ),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +11,7 @@ import 'package:tcc/ui/core/navigationBar.dart';
 import 'package:tcc/ui/medicine/view_models/get_all_medicine_view_model.dart';
 import 'package:tcc/ui/prescription/view_models/add_prescription_view_model.dart';
 import 'package:tcc/ui/prescription/view_models/get_all_prescription_view_model.dart';
+import 'package:tcc/ui/prescription/view_models/get_by_id_view_model.dart';
 import 'package:tcc/ui/user/view_models/login_user_view_model.dart';
 import 'package:tcc/ui/user/view_models/register_user_view_model.dart';
 import 'package:tcc/ui/user/widgets/forgot_password_screen.dart';
@@ -23,10 +26,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  NotificationService.initializeNotification();
-  FirebaseMessaging.onBackgroundMessage(
-    NotificationService.firebaseMessagingBackgroundHandler,
-  );
+  // Só registra as notificações no Android
+  if (Platform.isAndroid) {
+    await NotificationService.initializeNotification();
+    FirebaseMessaging.onBackgroundMessage(
+      NotificationService.firebaseMessagingBackgroundHandler,
+    );
+  }
 
   runApp(
     MultiProvider(
@@ -65,6 +71,13 @@ void main() async {
             ),
           ),
         ),
+        ChangeNotifierProvider<GetByIdViewModel>(
+          create: (context) => GetByIdViewModel(
+            PrescriptionService(
+              context.read<AuthService>(),
+            ),
+          ),
+        )
       ],
       child: MyApp(),
     ),

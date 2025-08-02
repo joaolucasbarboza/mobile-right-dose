@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:tcc/data/repositories/prescription/prescription_repository.dart';
 import 'package:tcc/data/services/auth_service.dart';
 import 'package:tcc/data/services/custom_http_client.dart';
+import 'package:tcc/models/prescription.dart';
 import 'package:tcc/utils/routes.dart';
 
 class PrescriptionService implements PrescriptionRepository {
@@ -42,6 +43,24 @@ class PrescriptionService implements PrescriptionRepository {
     if (response.statusCode != 201) {
       throw Exception(
         'Failed to add prescription: ${response.statusCode} - ${response.body}',
+      );
+    }
+  }
+
+  @override
+  Future<Prescription> getById(int id) async {
+    final String getByIdUrl = Routes.getPrescription;
+
+    final url = Uri.parse('$getByIdUrl/$id');
+
+    final response = await _httpClient.get(url);
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      return Prescription.fromMap(data);
+    } else {
+      throw Exception(
+        'Failed to fetch prescription by ID: ${response.statusCode}',
       );
     }
   }

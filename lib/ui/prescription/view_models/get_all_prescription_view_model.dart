@@ -18,14 +18,15 @@ class GetAllPrescriptionViewModel with ChangeNotifier {
   Future<void> fetchPrescriptions() async {
     if (_isFetching) return;
 
+    isLoading = true;
+    _isFetching = true;
     notifyListeners();
 
     try {
       final response = await _prescriptionService.getAllPrescriptions();
-      _prescriptions.clear();
       _prescriptions
-          .addAll(toList(response));
-      _isFetching = true;
+        ..clear()
+        ..addAll(toList(response));
     } catch (e) {
       debugPrint("Erro ao buscar prescrições: $e\n");
     } finally {

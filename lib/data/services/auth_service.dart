@@ -39,7 +39,10 @@ class AuthService extends ChangeNotifier {
       if (token != null) {
         _token = token;
         await saveToken(token);
-        await _sendFcmToken();
+
+        if (!Platform.isIOS) {
+          await _sendFcmToken();
+        }
         notifyListeners();
       }
       return token;

@@ -1,10 +1,11 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'dart:io' show Platform;
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationService {
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  FlutterLocalNotificationsPlugin();
 
   static final FirebaseMessaging _firebaseMessaging =
       FirebaseMessaging.instance;
@@ -12,93 +13,88 @@ class NotificationService {
   @pragma('vm:entry-point')
   static Future<void> firebaseMessagingBackgroundHandler(
       RemoteMessage message) async {
+    // só dispara on background para Android
+    if (!Platform.isAndroid) return;
     await _initializeLocalNotification();
     await _showFlutterNotification(message);
   }
 
-  // Initializes Firebase Messaging and Local Notifications
-static Future<void> initializeNotification() async {
-  // Request permissions (required on iOS, optional on Android)
-  await _firebaseMessaging.requestPermission();
+  static Future<void> initializeNotification() async {
+    // no iOS, pular tudo
+    if (Platform.isIOS) return;
 
-  // Called when message is received while app is in foreground
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-    await _showFlutterNotification(message);
-  });
+    // Request permissions (Android ignora sem problema)
+    await _firebaseMessaging.requestPermission();
 
-  // Called when app is brought to foreground from background by tapping a notification
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    print("App opened from background notification: ${message.data}");
-  });
+    // Mensagem em foreground
+    FirebaseMessaging.onMessage.listen((message) async {
+      await _showFlutterNotification(message);
+    });
 
-  // Get and print FCM token (for sending targeted messages)
-  await _getFcmToken();
+    // App aberto por notificação
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      debugPrint("App opened from notification: ${message.data}");
+    });
 
-  // Initialize the local notification plugin
-  await _initializeLocalNotification();
+    // Token para enviar mensagens direcionadas
+    await _getFcmToken();
 
-  // Check if app was launched by tapping on a notification
-  await _getInitialNotification();
-}
+    // Inicializa plugin local
+    await _initializeLocalNotification();
 
-/// Fetches and prints FCM token (optional)
-static Future<void> _getFcmToken() async {
-  String? token = await _firebaseMessaging.getToken();
-  print('FCM Token: $token');
-  // Use this token to send messages to this device
-}
+    // Checa se veio via notificação quando app estava morto
+    await _getInitialNotification();
+  }
+
+  static Future<void> _getFcmToken() async {
+    String? token = await _firebaseMessaging.getToken();
+    debugPrint('FCM Token: $token');
+  }
 
   static Future<void> _showFlutterNotification(RemoteMessage message) async {
-    RemoteNotification? notification = message.notification;
-    Map<String, dynamic>? data = message.data;
+    // só exibe no Android
+    if (!Platform.isAndroid) return;
 
-    String title = notification?.title ?? data?['title'] ?? 'No Title';
-    String body = notification?.body ?? data?['body'] ?? 'No Body';
+    final notif = message.notification;
+    final data = message.data;
+    final title = notif?.title ?? data['title'] ?? 'No Title';
+    final body = notif?.body ?? data['body'] ?? 'No Body';
 
-    AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-      'CHANEL_ID',
-      'CHANEL_NAME',
-      channelDescription: 'Notification channel for basic tests',
-      priority: Priority.high,
+    final androidDetails = AndroidNotificationDetails(
+      'CHANNEL_ID',
+      'CHANNEL_NAME',
+      channelDescription: 'Canal de notificações básicas',
       importance: Importance.high,
+      priority: Priority.high,
     );
 
-    NotificationDetails notificationDetails = NotificationDetails(
-      android: androidDetails,
-    );
-
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      title,
-      body,
-      notificationDetails,
-    );
+    final details = NotificationDetails(android: androidDetails);
+    await flutterLocalNotificationsPlugin.show(0, title, body, details);
   }
 
   static Future<void> _initializeLocalNotification() async {
-    AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+    // só precisa inicializar no Android
+    if (!Platform.isAndroid) return;
 
-    final InitializationSettings initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid);
+    const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const initSettings = InitializationSettings(android: androidInit);
 
     await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse: (NotificationResponse response) async {
-        print('User tapped notification: ${response.payload}');
+      initSettings,
+      onDidReceiveNotificationResponse: (response) {
+        debugPrint('Notification tapped: ${response.payload}');
       },
     );
   }
 
-  /// Handles notification tap when app is terminated
-static Future<void> _getInitialNotification() async {
-  RemoteMessage? message =
-      await FirebaseMessaging.instance.getInitialMessage();
+  static Future<void> _getInitialNotification() async {
+    // só faz sentido no Android aqui
+    if (!Platform.isAndroid) return;
 
-  if (message != null) {
-    print(
-      "App launched from terminated state via notification: ${message.data}",
-    );
+    final message = await FirebaseMessaging.instance.getInitialMessage();
+    if (message != null) {
+      debugPrint(
+          "Launched from terminated state by notification: ${message.data}");
+    }
   }
-}
 }
