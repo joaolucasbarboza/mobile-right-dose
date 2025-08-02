@@ -13,9 +13,9 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
   static final _timeFormat = DateFormat('HH:mm');
 
   const TextDetailsPrescriptionComponent({
-    Key? key,
+    super.key,
     required this.prescription,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -219,7 +219,7 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
                   );
                 },
               );
-            }).toList()
+            })
           else
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
