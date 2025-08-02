@@ -35,7 +35,6 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(medicineName, style: customTextTitle()),
@@ -43,7 +42,8 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
 
           // Informações principais
           CardInfoPrescription(
-            icon: const Icon(Icons.medication_rounded, size: 36, color: Colors.amber),
+            icon: const Icon(Icons.medication_rounded,
+                size: 36, color: Colors.amber),
             color: Colors.amber,
             primaryLabel: 'Dosagem a ser tomada',
             secondaryLabel: '$dosageAmount ${formatDosageUnit(dosageUnit)}',
@@ -51,7 +51,8 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
           const SizedBox(height: 8),
 
           CardInfoPrescription(
-            icon: const Icon(Icons.access_time_outlined, size: 36, color: Colors.deepPurpleAccent),
+            icon: const Icon(Icons.access_time_outlined,
+                size: 36, color: Colors.deepPurpleAccent),
             color: Colors.deepPurpleAccent,
             primaryLabel: 'Intervalo',
             secondaryLabel: uomFrequency == 'HOURLY'
@@ -67,7 +68,12 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Instruções de uso', style: customTextLabelPrimary()),
-                Text(instructions.isNotEmpty ? instructions : 'Nenhuma instrução adicional.'),
+                Text(
+                  instructions.isNotEmpty
+                      ? instructions
+                      : 'Nenhuma instrução adicional.',
+                  style: customTextLabel(),
+                ),
               ],
             ),
           ),
@@ -80,10 +86,17 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 4,
               children: [
                 Text('Detalhes', style: customTextLabelPrimary()),
-                Text('Tomar a medicação $totalOccurrences vez(es)'),
-                Text('Período: $startDate até $endDate'),
+                Text(
+                  'Tomar a medicação $totalOccurrences vez(es)',
+                  style: customTextLabel(),
+                ),
+                Text(
+                  'Período: $startDate até $endDate',
+                  style: customTextLabel(),
+                ),
               ],
             ),
           ),
@@ -95,10 +108,26 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              spacing: 8,
               children: [
-                Text('Notificações', style: customTextLabelPrimary()),
-                Switch(activeColor: Colors.green, value: wantsNotifications, onChanged: (_) {}),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Deseja receber notificações?',
+                          style: customTextLabelPrimary()),
+                      Text(
+                        'Você receberá notificações para tomar a medicação.',
+                        style: customTextLabel(),
+                      ),
+                    ],
+                  ),
+                ),
+                Switch(
+                  activeColor: Colors.green,
+                  value: wantsNotifications,
+                  onChanged: (_) {},
+                ),
               ],
             ),
           ),
@@ -109,7 +138,8 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
           // Histórico de notificações
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text('Próximas Notificações', style: customTextLabelPrimary()),
+            child:
+                Text('Próximas Notificações', style: customTextLabelPrimary()),
           ),
 
           if (p.notifications.isNotEmpty)
@@ -135,7 +165,6 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),
-
                 onTap: () {
                   showModalBottomSheet(
                     context: context,
@@ -159,7 +188,8 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
                               children: [
                                 const Icon(Icons.calendar_today),
                                 const SizedBox(width: 8),
-                                Text('Data: $date', style: customTextLabelPrimary()),
+                                Text('Data: $date',
+                                    style: customTextLabelPrimary()),
                               ],
                             ),
                             const SizedBox(height: 8),
@@ -178,7 +208,8 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
                                 Chip(
                                   label: Text(formatLowerCase(statusText)),
                                   backgroundColor: Colors.orange,
-                                  labelStyle: const TextStyle(color: Colors.white),
+                                  labelStyle:
+                                      const TextStyle(color: Colors.white),
                                   padding: const EdgeInsets.all(0),
                                   elevation: 0,
                                   shape: RoundedRectangleBorder(
@@ -192,25 +223,22 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
                               children: [
                                 const Icon(Icons.medication_rounded),
                                 const SizedBox(width: 8),
-                                Text('Dose: $dosageAmount ${formatDosageUnit(dosageUnit)}'),
+                                Text(
+                                    'Dose: $dosageAmount ${formatDosageUnit(dosageUnit)}'),
                               ],
                             ),
                             const SizedBox(height: 14),
-
                             ButtonPrimaryComponent(
                               text: 'Tomar medicação',
                               isLoading: false,
                               onPressed: () => Navigator.of(ctx).pop(),
                             ),
-
                             const SizedBox(height: 14),
-
                             ButtonSecondaryComponent(
                               text: 'Cancelar',
                               isLoading: false,
                               onPressed: () => Navigator.of(ctx).pop(),
                             ),
-
                             const SizedBox(height: 32),
                           ],
                         ),
@@ -235,7 +263,7 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
   static String formatLowerCase(String text) {
     return labelStatus(text).toLowerCase().replaceAll('_', ' ');
   }
-  
+
   static String labelStatus(String status) {
     switch (status.toUpperCase()) {
       case 'CONFIRMED':
