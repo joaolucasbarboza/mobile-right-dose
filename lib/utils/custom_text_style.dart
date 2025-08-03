@@ -12,6 +12,14 @@ TextStyle customTextLabel() {
   );
 }
 
+TextStyle customTextLabel2() {
+  return TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    color: Colors.grey.shade600,
+  );
+}
+
 TextStyle customTextLabelPrimary() {
   return TextStyle(
     fontSize: 18,
