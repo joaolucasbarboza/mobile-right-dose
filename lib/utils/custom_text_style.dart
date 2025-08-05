@@ -43,3 +43,11 @@ TextStyle customTextTitle() {
     color: Colors.black,
   );
 }
+
+TextStyle customTextTitleSecondary() {
+  return TextStyle(
+    fontSize: 26,
+    fontWeight: FontWeight.w600,
+    color: Colors.black54,
+  );
+}

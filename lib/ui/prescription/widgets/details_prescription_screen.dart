@@ -21,8 +21,8 @@ class _DetailsPrescriptionScreenState extends State<DetailsPrescriptionScreen> {
 
     Future.microtask(() {
       final viewModel = Provider.of<GetByIdViewModel>(context, listen: false);
-      viewModel.prescription = widget.prescription; // pré-carrega o dado já disponível
-      viewModel.findById(widget.prescription.id!); // atualiza com backend
+      viewModel.prescription = widget.prescription;
+      viewModel.findById(widget.prescription.id!);
     });
   }
 

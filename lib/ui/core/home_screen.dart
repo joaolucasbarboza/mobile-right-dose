@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tcc/ui/home/widgets/section_notifications.dart';
+
 import '../user/widgets/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,20 +14,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final now = DateTime.now();
-  final List<String> months = [
-    "Jan",
-    "Fev",
-    "Mar",
-    "Abr",
-    "Mai",
-    "Jun",
-    "Jul",
-    "Ago",
-    "Set",
-    "Out",
-    "Nov",
-    "Dez"
-  ];
 
   @override
   void initState() {
@@ -85,33 +73,24 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             IconButton(
               onPressed: () {
-               logoutUser();
-               Navigator.pushReplacement(
+                logoutUser();
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const LoginPage(),
                   ),
-               );
+                );
               },
               icon: Icon(Icons.account_circle_rounded),
             ),
           ],
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(48),
-            child: TabBar(
-              isScrollable: true,
-              tabs: months.map((month) => Tab(text: month)).toList(),
-            ),
-          ),
         ),
-        body: TabBarView(
-          children: List.generate(
-            12,
-            (index) {
-              return Center(
-                child: Text("Conteúdo de ${months[index]}"),
-              );
-            },
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              SectionNotifications(),
+            ],
           ),
         ),
       ),
@@ -119,14 +98,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> logoutUser() async {
-    SharedPreferences _sharedPreferences = await SharedPreferences.getInstance();
-    await _sharedPreferences.remove("token");
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.remove("token");
   }
 
   Future<bool> verifyUser() async {
-    SharedPreferences _sharedPreferences = await SharedPreferences.getInstance();
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-    String? token = _sharedPreferences.getString("token");
+    String? token = sharedPreferences.getString("token");
 
     if (token == null) {
       return false;
