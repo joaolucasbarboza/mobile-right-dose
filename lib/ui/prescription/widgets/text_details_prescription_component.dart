@@ -54,10 +54,8 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
           CardInfoPrescription(
             icon: const Icon(Icons.access_time_outlined,
                 size: 36, color: Colors.deepPurpleAccent),
-
             color: Colors.deepPurpleAccent,
             primaryLabel: 'Intervalo',
-
             secondaryLabel: uomFrequency == 'HOURLY'
                 ? 'A cada $frequency ${formatUomFrequency(uomFrequency)}'
                 : '$frequency vez(es) ao dia',
@@ -85,7 +83,10 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
           Row(
             spacing: _spacing,
             children: [
-              Icon(Icons.details_outlined, size: _sizeIcon,),
+              Icon(
+                Icons.details_outlined,
+                size: _sizeIcon,
+              ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: 4,
@@ -112,7 +113,10 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
           Row(
             spacing: _spacing,
             children: [
-              Icon(Icons.notifications_none_rounded, size: _sizeIcon,),
+              Icon(
+                Icons.notifications_none_rounded,
+                size: _sizeIcon,
+              ),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,12 +141,20 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
           Divider(),
           const SizedBox(height: 8),
 
-          Text('Próximas Notificações', style: customTextLabelPrimary()),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Lembretes',
+                style: customTextLabelPrimary(),
+              ),
+              Text("Você ainda receberá ${p.notifications.length} lembretes")
+            ],
+          ),
 
           const SizedBox(height: 8),
-          ListViewNotifications(lengthNotifications: p.notifications),
+          ListViewNotifications(notifications: p.notifications),
         ],
-
       ),
     );
   }

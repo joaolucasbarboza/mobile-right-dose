@@ -41,7 +41,7 @@ class Prescription {
       frequency: map['frequency'],
       uomFrequency: map['uomFrequency'],
       indefinite: map['indefinite'] ?? false,
-      totalOccurrences: map['totalOccurrences'] ?? 0, // Corrigido aqui
+      totalOccurrences: map['totalOccurrences'] ?? 0,
       startDate: DateTime.parse(map['startDate']),
       endDate: map['endDate'] != null ? DateTime.parse(map['endDate']) : DateTime.now(), // Corrigido aqui
       wantsNotifications: map['wantsNotifications'],

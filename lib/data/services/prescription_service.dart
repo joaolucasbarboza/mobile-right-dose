@@ -4,6 +4,7 @@ import 'package:tcc/data/repositories/prescription/prescription_repository.dart'
 import 'package:tcc/data/services/auth_service.dart';
 import 'package:tcc/data/services/custom_http_client.dart';
 import 'package:tcc/models/prescription.dart';
+import 'package:tcc/models/prescription_notification.dart';
 import 'package:tcc/utils/routes.dart';
 
 class PrescriptionService implements PrescriptionRepository {
@@ -61,6 +62,30 @@ class PrescriptionService implements PrescriptionRepository {
     } else {
       throw Exception(
         'Failed to fetch prescription by ID: ${response.statusCode}',
+      );
+    }
+  }
+
+  @override
+  Future<PrescriptionNotification> updateStatus(int id, String status) async {
+    final String updateStatusUrl = Routes.updatePrescriptionStatus;
+
+    Map<String, dynamic> body = {
+      'notificationId': id,
+      'status': status,
+    };
+
+    final response = await _httpClient.patch(
+      Uri.parse(updateStatusUrl),
+      body: jsonEncode(body),
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      return PrescriptionNotification.fromMap(data);
+    } else {
+      throw Exception(
+        'Failed to update prescription status: ${response.statusCode}',
       );
     }
   }

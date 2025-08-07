@@ -10,6 +10,7 @@ class PrescriptionNotification {
   final Status status;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final int? prescriptionId;
 
   PrescriptionNotification({
     this.id,
@@ -17,6 +18,7 @@ class PrescriptionNotification {
     required this.status,
     required this.createdAt,
     required this.updatedAt,
+    this.prescriptionId,
   });
 
   factory PrescriptionNotification.fromMap(Map<String, dynamic> map) {
@@ -26,10 +28,10 @@ class PrescriptionNotification {
       status: _statusFromString(map['status'] as String),
       createdAt: DateTime.parse(map['createdAt'] as String),
       updatedAt: DateTime.parse(map['updatedAt'] as String),
+      prescriptionId: map['prescriptionId'],
     );
   }
 
-  /// Mapeia string para enum Status
   static Status _statusFromString(String value) {
     return Status.values.firstWhere(
           (e) => e.toString().split('.').last.toUpperCase() == value.toUpperCase(),

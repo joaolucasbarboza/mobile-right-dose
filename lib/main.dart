@@ -12,6 +12,7 @@ import 'package:tcc/ui/medicine/view_models/get_all_medicine_view_model.dart';
 import 'package:tcc/ui/prescription/view_models/add_prescription_view_model.dart';
 import 'package:tcc/ui/prescription/view_models/get_all_prescription_view_model.dart';
 import 'package:tcc/ui/prescription/view_models/get_by_id_view_model.dart';
+import 'package:tcc/ui/prescription/view_models/update_status_notification_view_model.dart';
 import 'package:tcc/ui/user/view_models/login_user_view_model.dart';
 import 'package:tcc/ui/user/view_models/register_user_view_model.dart';
 import 'package:tcc/ui/user/widgets/forgot_password_screen.dart';
@@ -26,7 +27,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // Só registra as notificações no Android
   if (Platform.isAndroid) {
     await NotificationService.initializeNotification();
     FirebaseMessaging.onBackgroundMessage(
@@ -77,7 +77,13 @@ void main() async {
               context.read<AuthService>(),
             ),
           ),
-        )
+        ),
+        ChangeNotifierProvider<UpdateStatusNotificationViewModel>(
+          create: (context) => UpdateStatusNotificationViewModel(
+            PrescriptionService(context.read<AuthService>()),
+            context.read<GetByIdViewModel>(),
+          ),
+        ),
       ],
       child: MyApp(),
     ),

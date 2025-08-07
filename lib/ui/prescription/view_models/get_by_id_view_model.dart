@@ -21,6 +21,7 @@ class GetByIdViewModel with ChangeNotifier {
 
     try {
       prescription = await _prescriptionService.getById(id);
+      notifyListeners();
     } catch (e) {
       error = e.toString();
     } finally {
