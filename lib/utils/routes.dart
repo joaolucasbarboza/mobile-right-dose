@@ -1,5 +1,5 @@
 class Routes {
-  static const apiUrl = "http://172.100.120.39:8080";
+  static const apiUrl = "http://192.168.0.18:8080";
   static const authLogin = "$apiUrl/auth/login";
   static const authRegister = "$apiUrl/auth/register";
 

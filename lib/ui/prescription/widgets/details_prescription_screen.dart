@@ -32,7 +32,6 @@ class _DetailsPrescriptionScreenState extends State<DetailsPrescriptionScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Detalhes da Prescrição"),
         actions: [
           PopupMenuButton(
             elevation: 1,

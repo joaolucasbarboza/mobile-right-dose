@@ -6,8 +6,7 @@ String capitalizeFirstLetter(String string) {
 
 TextStyle customTextLabel() {
   return TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
+    fontSize: 14,
     color: Colors.grey.shade600,
   );
 }
@@ -22,9 +21,9 @@ TextStyle customTextLabel2() {
 
 TextStyle customTextLabelPrimary() {
   return TextStyle(
-    fontSize: 18,
-    fontWeight: FontWeight.bold,
-    color: Colors.black87,
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: Colors.grey.shade600,
   );
 }
 

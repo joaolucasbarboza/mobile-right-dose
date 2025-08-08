@@ -28,6 +28,7 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
     final totalOccurrences = p.totalOccurrences.toString();
     final startDate = _dateFormat.format(p.startDate);
     final endDate = _dateFormat.format(p.endDate);
+    final indefinite = p.indefinite;
     final instructions = p.instructions?.toString() ?? '';
     final wantsNotifications = p.wantsNotifications;
     final medicineName = p.medicine.name;
@@ -92,14 +93,21 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
                 spacing: 4,
                 children: [
                   Text('Detalhes', style: customTextLabelPrimary()),
-                  Text(
-                    'Tomar a medicação $totalOccurrences vez(es)',
-                    style: customTextLabel(),
-                  ),
-                  Text(
-                    'Período: $startDate até $endDate',
-                    style: customTextLabel(),
-                  ),
+                  !indefinite ?
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Tomar a medicação $totalOccurrences vez(es)',
+                          style: customTextLabel(),
+                        ),
+                        Text(
+                          'Período: $startDate até $endDate',
+                          style: customTextLabel(),
+                        ),
+                      ],
+                    )
+                      : Text("Está medicação não possui um período definido.", style: customTextLabel(),)
                 ],
               ),
             ],
@@ -109,7 +117,6 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
           Divider(),
           const SizedBox(height: 8),
 
-          // Switch de notificações
           Row(
             spacing: _spacing,
             children: [
