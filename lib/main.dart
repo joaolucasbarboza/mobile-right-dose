@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:tcc/data/services/auth_service.dart';
 import 'package:tcc/data/services/medicine_service.dart';
 import 'package:tcc/data/services/notification_service.dart';
@@ -20,11 +23,9 @@ import 'package:tcc/ui/user/widgets/login_screen.dart';
 import 'package:tcc/ui/user/widgets/register_screen.dart';
 import 'package:tcc/utils/navigator_service.dart';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+Future<void> _initFirebaseAndNotifications() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   if (Platform.isAndroid) {
@@ -33,49 +34,47 @@ void main() async {
       NotificationService.firebaseMessagingBackgroundHandler,
     );
   }
+}
+
+Future<bool> _hasToken() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString('token') != null;
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await _initFirebaseAndNotifications();
+  final isLoggedIn = await _hasToken();
 
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider<AuthService>(
-          create: (_) => AuthService(),
-        ),
+        ChangeNotifierProvider<AuthService>(create: (_) => AuthService()),
         ChangeNotifierProvider<GetAllPrescriptionViewModel>(
           create: (context) => GetAllPrescriptionViewModel(
-            PrescriptionService(
-              context.read<AuthService>(),
-            ),
+            PrescriptionService(context.read<AuthService>()),
           ),
         ),
         ChangeNotifierProvider<GetAllMedicineViewModel>(
           create: (context) => GetAllMedicineViewModel(
-            MedicineService(
-              context.read<AuthService>(),
-            ),
+            MedicineService(context.read<AuthService>()),
           ),
         ),
         ChangeNotifierProvider<LoginUserViewModel>(
-          create: (context) => LoginUserViewModel(
-            context.read<AuthService>(),
-          ),
+          create: (context) => LoginUserViewModel(context.read<AuthService>()),
         ),
         ChangeNotifierProvider<RegisterUserViewModel>(
-          create: (context) => RegisterUserViewModel(
-            context.read<AuthService>(),
-          ),
+          create: (context) => RegisterUserViewModel(context.read<AuthService>()),
         ),
         ChangeNotifierProvider<AddPrescriptionViewModel>(
           create: (context) => AddPrescriptionViewModel(
-            PrescriptionService(
-              context.read<AuthService>(),
-            ),
+            PrescriptionService(context.read<AuthService>()),
           ),
         ),
         ChangeNotifierProvider<GetByIdViewModel>(
           create: (context) => GetByIdViewModel(
-            PrescriptionService(
-              context.read<AuthService>(),
-            ),
+            PrescriptionService(context.read<AuthService>()),
           ),
         ),
         ChangeNotifierProvider<UpdateStatusNotificationViewModel>(
@@ -85,30 +84,31 @@ void main() async {
           ),
         ),
       ],
-      child: MyApp(),
+      child: MyApp(isLoggedIn: isLoggedIn),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isLoggedIn;
+  const MyApp({super.key, required this.isLoggedIn});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: NavigatorService.navigatorKey,
       routes: {
-        '/login': (context) => LoginPage(),
-        '/home': (context) => NavigationComponent(),
-        '/register': (context) => RegisterScreen(),
-        '/forgot-password': (context) => ForgotPasswordScreen(),
+        '/login': (context) => const LoginPage(),
+        '/home': (context) => const NavigationComponent(),
+        '/register': (context) => const RegisterScreen(),
+        '/forgot-password': (context) => const ForgotPasswordScreen(),
       },
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
         primaryColor: Colors.blue,
         scaffoldBackgroundColor: Colors.white,
-        appBarTheme: AppBarTheme(backgroundColor: Colors.white),
+        appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.blue,
           primary: Colors.blue,
@@ -116,7 +116,9 @@ class MyApp extends StatelessWidget {
           onPrimary: Colors.white,
         ),
       ),
-      home: NavigationComponent(),
+      home: isLoggedIn ? const NavigationComponent() : const LoginPage(),
+      // Se preferir rotas nomeadas:
+      // initialRoute: isLoggedIn ? '/home' : '/login',
     );
   }
 }

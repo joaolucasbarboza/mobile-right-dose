@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tcc/models/prescription.dart';
 import 'package:tcc/ui/prescription/widgets/card_info_prescription.dart';
+import 'package:tcc/ui/prescription/widgets/history_notifications.dart';
 import 'package:tcc/ui/prescription/widgets/list_view_notifications.dart';
 import 'package:tcc/utils/custom_text_style.dart';
 import 'package:tcc/utils/format_strings.dart';
@@ -41,7 +42,6 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Text(medicineName, style: customTextTitle()),
           ),
-
           CardInfoPrescription(
             icon: const Icon(Icons.medication_rounded,
                 size: 36, color: Colors.amber),
@@ -49,9 +49,7 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
             primaryLabel: 'Dosagem a ser tomada',
             secondaryLabel: '$dosageAmount ${formatDosageUnit(dosageUnit)}',
           ),
-
           const SizedBox(height: 8),
-
           CardInfoPrescription(
             icon: const Icon(Icons.access_time_outlined,
                 size: 36, color: Colors.deepPurpleAccent),
@@ -61,9 +59,7 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
                 ? 'A cada $frequency ${formatUomFrequency(uomFrequency)}'
                 : '$frequency vez(es) ao dia',
           ),
-
           const SizedBox(height: 16),
-
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -76,11 +72,9 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
               ),
             ],
           ),
-
           const SizedBox(height: 8),
           Divider(),
           const SizedBox(height: 8),
-
           Row(
             spacing: _spacing,
             children: [
@@ -93,30 +87,31 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
                 spacing: 4,
                 children: [
                   Text('Detalhes', style: customTextLabelPrimary()),
-                  !indefinite ?
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Tomar a medicação $totalOccurrences vez(es)',
+                  !indefinite
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Tomar a medicação $totalOccurrences vez(es)',
+                              style: customTextLabel(),
+                            ),
+                            Text(
+                              'Período: $startDate até $endDate',
+                              style: customTextLabel(),
+                            ),
+                          ],
+                        )
+                      : Text(
+                          "Está medicação não possui um período definido.",
                           style: customTextLabel(),
-                        ),
-                        Text(
-                          'Período: $startDate até $endDate',
-                          style: customTextLabel(),
-                        ),
-                      ],
-                    )
-                      : Text("Está medicação não possui um período definido.", style: customTextLabel(),)
+                        )
                 ],
               ),
             ],
           ),
-
           const SizedBox(height: 16),
           Divider(),
           const SizedBox(height: 8),
-
           Row(
             spacing: _spacing,
             children: [
@@ -147,7 +142,6 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
           const SizedBox(height: 8),
           Divider(),
           const SizedBox(height: 8),
-
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -155,12 +149,16 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
                 'Lembretes',
                 style: customTextLabelPrimary(),
               ),
-              Text("Você ainda receberá ${p.notifications.length} lembretes")
+              !indefinite
+                  ? Text(
+                      "Você ainda receberá ${p.notifications.length} lembretes")
+                  : Text("Seus próximos lembretes")
             ],
           ),
-
           const SizedBox(height: 8),
           ListViewNotifications(notifications: p.notifications),
+          const SizedBox(height: 16),
+          HistoryNotifications()
         ],
       ),
     );
