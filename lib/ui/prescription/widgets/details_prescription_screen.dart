@@ -22,7 +22,7 @@ class _DetailsPrescriptionScreenState extends State<DetailsPrescriptionScreen> {
     Future.microtask(() {
       final viewModel = Provider.of<GetByIdViewModel>(context, listen: false);
       viewModel.prescription = widget.prescription;
-      viewModel.findById(widget.prescription.id!);
+      viewModel.findById(widget.prescription.id);
     });
   }
 
