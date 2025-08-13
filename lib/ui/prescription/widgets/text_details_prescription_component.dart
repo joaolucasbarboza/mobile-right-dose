@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:tcc/models/prescription.dart';
 import 'package:tcc/ui/prescription/widgets/card_info_prescription.dart';
 import 'package:tcc/ui/prescription/widgets/history_notifications.dart';
-import 'package:tcc/ui/prescription/widgets/list_view_notifications.dart';
+import 'package:tcc/ui/notification/widgets/list_view_notifications.dart';
 import 'package:tcc/utils/custom_text_style.dart';
 import 'package:tcc/utils/format_strings.dart';
 

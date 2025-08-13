@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tcc/ui/prescription/widgets/details_prescription_screen.dart';
+import 'package:tcc/utils/custom_text_style.dart';
 
 import '../../prescription/view_models/get_all_prescription_view_model.dart';
 
-class SectionNotifications extends StatelessWidget {
-  const SectionNotifications({super.key});
+class SectionPrescriptions extends StatelessWidget {
+  const SectionPrescriptions({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +16,10 @@ class SectionNotifications extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Text(
+          "Prescrições",
+          style: customTextTitleSecondaryBlack(),
+        ),
         if (prescriptions.isEmpty)
           const Center(child: Text("Nenhuma notificação encontrada."))
         else
@@ -27,16 +32,14 @@ class SectionNotifications extends StatelessWidget {
                   leading: const Icon(Icons.medication_outlined),
                   trailing: const Icon(Icons.navigate_next_outlined),
                   title: Text(prescription.medicine.name),
-                  subtitle:
-                  Text("${prescription.dosageAmount} ${prescription
-                      .dosageUnit}"),
+                  subtitle: Text("${prescription.dosageAmount} ${prescription.dosageUnit}"),
                   onTap: () {
-                    Navigator.push(context,
+                    Navigator.push(
+                      context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            DetailsPrescriptionScreen(
-                              prescription: prescription,
-                            ),
+                        builder: (context) => DetailsPrescriptionScreen(
+                          prescription: prescription,
+                        ),
                       ),
                     );
                   },

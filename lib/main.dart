@@ -12,6 +12,7 @@ import 'package:tcc/data/services/notification_service.dart';
 import 'package:tcc/data/services/prescription_service.dart';
 import 'package:tcc/ui/core/navigationBar.dart';
 import 'package:tcc/ui/medicine/view_models/get_all_medicine_view_model.dart';
+import 'package:tcc/ui/notification/view_models/get_all_upcoming_notifications_view_model.dart';
 import 'package:tcc/ui/prescription/view_models/add_prescription_view_model.dart';
 import 'package:tcc/ui/prescription/view_models/get_all_prescription_view_model.dart';
 import 'package:tcc/ui/prescription/view_models/get_by_id_view_model.dart';
@@ -23,6 +24,7 @@ import 'package:tcc/ui/user/widgets/login_screen.dart';
 import 'package:tcc/ui/user/widgets/register_screen.dart';
 import 'package:tcc/utils/navigator_service.dart';
 
+import 'data/services/prescription_notifications_service.dart';
 import 'firebase_options.dart';
 
 Future<void> _initFirebaseAndNotifications() async {
@@ -54,6 +56,11 @@ void main() async {
         ChangeNotifierProvider<GetAllPrescriptionViewModel>(
           create: (context) => GetAllPrescriptionViewModel(
             PrescriptionService(context.read<AuthService>()),
+          ),
+        ),
+        ChangeNotifierProvider<GetAllUpcomingNotificationsViewModel>(
+          create: (context) => GetAllUpcomingNotificationsViewModel(
+            PrescriptionNotificationService(context.read<AuthService>()),
           ),
         ),
         ChangeNotifierProvider<GetAllMedicineViewModel>(
@@ -91,6 +98,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final bool isLoggedIn;
+
   const MyApp({super.key, required this.isLoggedIn});
 
   @override

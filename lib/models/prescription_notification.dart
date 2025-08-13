@@ -10,7 +10,10 @@ class PrescriptionNotification {
   final Status status;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final String? medicineName;
+  final double? dosageAmount;
   final int? prescriptionId;
+  final String? dosageUnit;
 
   PrescriptionNotification({
     this.id,
@@ -18,7 +21,10 @@ class PrescriptionNotification {
     required this.status,
     required this.createdAt,
     required this.updatedAt,
+    this.medicineName,
+    this.dosageAmount,
     this.prescriptionId,
+    this.dosageUnit,
   });
 
   factory PrescriptionNotification.fromMap(Map<String, dynamic> map) {
@@ -28,7 +34,10 @@ class PrescriptionNotification {
       status: _statusFromString(map['status'] as String),
       createdAt: DateTime.parse(map['createdAt'] as String),
       updatedAt: DateTime.parse(map['updatedAt'] as String),
-      prescriptionId: map['prescriptionId'],
+      medicineName: map['medicineName'] as String?,
+      dosageAmount: map['dosageAmount'] as double?,
+      prescriptionId: map['prescriptionId'] as int?,
+      dosageUnit: map['dosageUnit'] as String?,
     );
   }
 

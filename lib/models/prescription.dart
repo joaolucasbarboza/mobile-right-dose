@@ -2,7 +2,7 @@ import 'package:tcc/models/medicine.dart';
 import 'package:tcc/models/prescription_notification.dart';
 
 class Prescription {
-  int? id;
+  int id;
   Medicine medicine;
   double dosageAmount;
   String dosageUnit;
@@ -17,7 +17,7 @@ class Prescription {
   List<PrescriptionNotification> notifications;
 
   Prescription({
-    this.id,
+    required this.id,
     required this.medicine,
     required this.dosageAmount,
     required this.dosageUnit,
