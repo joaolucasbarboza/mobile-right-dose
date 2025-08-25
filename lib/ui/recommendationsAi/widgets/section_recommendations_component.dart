@@ -1,0 +1,319 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:tcc/models/recommendation.dart';
+import 'package:tcc/ui/core/button_primary_component.dart';
+import 'package:tcc/ui/recommendationsAi/widgets/recommendations_screen.dart';
+import 'package:tcc/utils/custom_text_style.dart';
+
+import '../../../models/meals.dart';
+import '../view_model/generate_ai_view_model.dart';
+
+class SectionRecommendationsComponent extends StatefulWidget {
+  const SectionRecommendationsComponent({super.key});
+
+  @override
+  State<SectionRecommendationsComponent> createState() => _SectionRecommendationsComponentState();
+}
+
+class _SectionRecommendationsComponentState extends State<SectionRecommendationsComponent> {
+  static final _dateFormat = DateFormat('dd/MM/yyyy HH:mm');
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final viewModel = context.watch<GenerateAiViewModel>();
+
+    Widget body;
+    if (viewModel.isLoading && viewModel.data == null) {
+      body = const _Skeleton();
+    } else if (viewModel.error != null && viewModel.data == null) {
+      body = _ErrorState(
+        message: viewModel.error!,
+        onRetry: () => viewModel.generateRecommendation(),
+      );
+    } else if (viewModel.data == null) {
+      body = _EmptyState(onRefresh: () => viewModel.generateRecommendation());
+    } else {
+      body = _RecommendationView(data: viewModel.data!, df: _dateFormat);
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _Header(
+            dateFormat: _dateFormat,
+            data: viewModel.data,
+            onRefresh: () => viewModel.generateRecommendation(),
+            trailing: viewModel.isLoading
+                ? const SizedBox(
+              width: 18,
+              height: 18,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            )
+                : null,
+          ),
+          const SizedBox(height: 12),
+          ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 120, minWidth: 250),
+            child: body,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Header extends StatelessWidget {
+  final VoidCallback onRefresh;
+  final Widget? trailing;
+  final Recommendation? data; // <-- agora é opcional
+  final DateFormat dateFormat;
+
+  const _Header({
+    required this.onRefresh,
+    this.trailing,
+    this.data,
+    required this.dateFormat,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Recomendação da IA', style: customTextTitle()),
+              if (data != null)
+                Text(
+                  'Gerado em ${dateFormat.format(data!.generatedAt.toLocal())}',
+                  style: customTextLabel(),
+                )
+              else
+                Text(
+                  'Ainda não gerado',
+                  style: customTextLabel(),
+                ),
+            ],
+          ),
+        ),
+        IconButton(
+          tooltip: 'Atualizar',
+          onPressed: onRefresh,
+          icon: const Icon(Icons.refresh),
+        ),
+        if (trailing != null) trailing!,
+      ],
+    );
+  }
+}
+
+class _RecommendationView extends StatelessWidget {
+  final Recommendation data;
+  final DateFormat df;
+
+  const _RecommendationView({required this.data, required this.df});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+      _MealsList(meals: data.meals, alerts: data.alerts, substitutions: data.substitutions),
+        //
+        // if (data.alerts.isNotEmpty) ...[
+        //   const SizedBox(height: 16),
+        //   _SectionTitle('Alertas'),
+        //   const SizedBox(height: 8),
+        //   _BulletList(items: data.alerts, icon: Icons.priority_high_rounded),
+        // ],
+
+        // if (data.substitutions.isNotEmpty) ...[
+        //   const SizedBox(height: 16),
+        //   _SectionTitle('Substituições sugeridas'),
+        //   const SizedBox(height: 8),
+        //   _Chips(items: data.substitutions),
+        // ],
+        //
+        // if (data.profileApplied.isNotEmpty) ...[
+        //   const SizedBox(height: 16),
+        //   _SectionTitle('Perfil considerado'),
+        //   const SizedBox(height: 8),
+        //   _KeyValueGrid(map: data.profileApplied),
+        // ],
+      ],
+    );
+  }
+}
+
+class _MealsList extends StatelessWidget {
+  final Meals meals;
+  final List<String> alerts;
+  final List<String> substitutions;
+
+  const _MealsList({required this.meals, required this.alerts, required this.substitutions});
+
+  @override
+  Widget build(BuildContext context) {
+    final c = Theme.of(context).colorScheme;
+
+    final rows = <({IconData icon, String label, String value})>[
+      (icon: Icons.wb_sunny_outlined, label: 'Café da manhã', value: meals.breakfast),
+      (icon: Icons.lunch_dining_outlined, label: 'Almoço', value: meals.lunch),
+      (icon: Icons.dinner_dining_outlined, label: 'Jantar', value: meals.dinner),
+      (icon: Icons.free_breakfast_outlined, label: 'Lanche da manhã', value: meals.snackMorning),
+      (icon: Icons.local_cafe_outlined, label: 'Lanche da tarde', value: meals.snackAfternoon),
+    ].where((e) => e.value.trim().isNotEmpty).toList();
+
+    return Column(
+      children: [
+        Column(
+          children: rows.asMap().entries.map((entry) {
+            final e = entry.value;
+
+            return Column(
+              children: [
+                ListTile(
+                  tileColor: Colors.white,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  leading: Icon(e.icon, color: c.primary),
+                  title: Text(
+                    e.label,
+                    style: TextStyle(fontWeight: FontWeight.w600, color: c.onSurface),
+                  ),
+                  subtitle: Text(
+                    e.value,
+                    style: TextStyle(color: c.onSurfaceVariant),
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(color: c.outlineVariant, width: 0.5),
+                  ),
+                  trailing: const Icon(Icons.navigate_next_rounded),
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(e.label, style: Theme.of(context).textTheme.titleMedium),
+                              const SizedBox(height: 8),
+                              Text(e.value, style: Theme.of(context).textTheme.bodyMedium),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+                const SizedBox(height: 8),
+              ],
+            );
+          }).toList(),
+        ),
+        ButtonPrimaryComponent(text: "Ver detalhes", isLoading: false, onPressed: () {
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context) => RecommendationsScreen(meals: meals, alerts: alerts, substitutions: substitutions),
+          ));
+        })
+      ],
+    );
+  }
+}
+
+class _EmptyState extends StatelessWidget {
+  final Future<void> Function() onRefresh;
+
+  const _EmptyState({required this.onRefresh});
+
+  @override
+  Widget build(BuildContext context) {
+    final c = Theme.of(context).colorScheme;
+    return ListView(
+      shrinkWrap: true,
+      physics: const AlwaysScrollableScrollPhysics(),
+      children: [
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 24),
+            child: Column(
+              children: [
+                Icon(Icons.inbox_outlined, size: 40, color: c.outline),
+                const SizedBox(height: 8),
+                Text('Nenhuma recomendação no momento', style: TextStyle(color: c.onSurfaceVariant)),
+                const SizedBox(height: 12),
+                OutlinedButton.icon(
+                  onPressed: onRefresh,
+                  icon: const Icon(Icons.refresh),
+                  label: const Text('Atualizar'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ErrorState extends StatelessWidget {
+  final String message;
+  final VoidCallback onRetry;
+
+  const _ErrorState({required this.message, required this.onRetry});
+
+  @override
+  Widget build(BuildContext context) {
+    final c = Theme.of(context).colorScheme;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.error_outline_rounded, size: 40, color: c.error),
+            const SizedBox(height: 8),
+            Text('Falha ao carregar recomendações', style: TextStyle(color: c.onSurface, fontWeight: FontWeight.w600)),
+            const SizedBox(height: 4),
+            Text(message, textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: c.onSurfaceVariant)),
+            const SizedBox(height: 12),
+            FilledButton.tonal(onPressed: onRetry, child: const Text('Tentar novamente')),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Skeleton extends StatelessWidget {
+  const _Skeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    final base = Theme.of(context).colorScheme.surfaceContainerHighest;
+    return Column(
+      children: List.generate(
+        3,
+        (_) => Container(
+          margin: const EdgeInsets.only(bottom: 8),
+          height: 72,
+          decoration: BoxDecoration(
+            color: base.withOpacity(0.6),
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1,6 +1,7 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:tcc/ui/home/widgets/section_upcoming_notifications.dart';
+import 'package:tcc/ui/recommendationsAi/widgets/section_recommendations_component.dart';
 
 import '../user/widgets/login_screen.dart';
 
@@ -69,12 +70,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         body: ListView(
-          padding: const EdgeInsets.all(16.0),
+
           children: [
             Column(
-              spacing: 16,
+              spacing: 8,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SectionRecommendationsComponent(),
                 SectionUpcomingNotifications(),
                 // SectionPrescriptions(),
               ],

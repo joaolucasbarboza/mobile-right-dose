@@ -7,15 +7,13 @@ String capitalizeFirstLetter(String string) {
 TextStyle customTextLabel() {
   return TextStyle(
     fontSize: 14,
-    fontWeight: FontWeight.w500,
-    color: Colors.grey.shade700,
+    color: Colors.grey.shade500,
   );
 }
 
 TextStyle customTextLabel2() {
   return TextStyle(
     fontSize: 14,
-    fontWeight: FontWeight.w700,
     color: Colors.grey.shade600,
   );
 }
@@ -24,7 +22,7 @@ TextStyle customTextLabelPrimary() {
   return TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w500,
-    color: Colors.grey.shade600,
+    color: Colors.grey.shade900,
   );
 }
 
@@ -38,7 +36,7 @@ TextStyle customTextSubtitle(int quantity) {
 
 TextStyle customTextTitle() {
   return TextStyle(
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: FontWeight.w600,
     color: Colors.black,
   );
@@ -46,15 +44,15 @@ TextStyle customTextTitle() {
 
 TextStyle customTextTitleSecondary() {
   return TextStyle(
-    fontSize: 26,
-    fontWeight: FontWeight.w600,
+    fontSize: 24,
+    fontWeight: FontWeight.w400,
     color: Colors.black54,
   );
 }
 
 TextStyle customTextTitleSecondaryBlack() {
   return TextStyle(
-    fontSize: 26,
+    fontSize: 24,
     fontWeight: FontWeight.w600,
     color: Colors.black87,
   );

@@ -13,5 +13,7 @@ class Routes {
 
   static const updatePrescriptionStatus = "$apiUrl/prescriptions-notifications/update-status";
 
+  static const generateRecommendation = "$apiUrl/generate-ai";
+
   static const fcmTokenUrl = "$apiUrl/user/update-token";
 }

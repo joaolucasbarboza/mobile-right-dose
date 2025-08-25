@@ -27,16 +27,26 @@ class _SectionUpcomingNotificationsState
       builder: (context, viewModel, child) {
         final notifications = viewModel.notifications;
 
-        return Column(
-          spacing: 12,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Próximos lembretes", style: customTextTitleSecondaryBlack()),
-            if (notifications.isEmpty)
-              const Center(child: Text("Nenhuma notificação encontrada."))
-            else
-              ListViewNotificationsWithPrescription(notifications: notifications)
-          ],
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            spacing: 12,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                spacing: 8,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Próximos lembretes", style: customTextTitleSecondaryBlack()),
+                  Text("Você tem ${notifications.length} lembrete(s) agendado(s).", style: customTextLabel()),
+                ],
+              ),
+              if (notifications.isEmpty)
+                const Center(child: Text("Nenhuma notificação encontrada."))
+              else
+                ListViewNotificationsWithPrescription(notifications: notifications)
+            ],
+          ),
         );
       },
     );
