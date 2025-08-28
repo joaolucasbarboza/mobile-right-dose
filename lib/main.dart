@@ -19,6 +19,7 @@ import 'package:tcc/ui/prescription/view_models/get_all_prescription_view_model.
 import 'package:tcc/ui/prescription/view_models/get_by_id_view_model.dart';
 import 'package:tcc/ui/prescription/view_models/update_status_notification_view_model.dart';
 import 'package:tcc/ui/recommendationsAi/view_model/generate_ai_view_model.dart';
+import 'package:tcc/ui/user/view_models/create_health_view_model.dart';
 import 'package:tcc/ui/user/view_models/login_user_view_model.dart';
 import 'package:tcc/ui/user/view_models/register_user_view_model.dart';
 import 'package:tcc/ui/user/widgets/forgot_password_screen.dart';
@@ -26,6 +27,7 @@ import 'package:tcc/ui/user/widgets/login_screen.dart';
 import 'package:tcc/ui/user/widgets/register_screen.dart';
 import 'package:tcc/utils/navigator_service.dart';
 
+import 'data/services/health_service.dart';
 import 'data/services/prescription_notifications_service.dart';
 import 'firebase_options.dart';
 
@@ -62,8 +64,8 @@ void main() async {
         ),
         ChangeNotifierProvider<GenerateAiViewModel>(
             create: (context) => GenerateAiViewModel(
-              RecommendationService(context.read<AuthService>()),
-            )),
+                  RecommendationService(context.read<AuthService>()),
+                )),
         ChangeNotifierProvider<GetAllUpcomingNotificationsViewModel>(
           create: (context) => GetAllUpcomingNotificationsViewModel(
             PrescriptionNotificationService(context.read<AuthService>()),
@@ -88,6 +90,11 @@ void main() async {
         ChangeNotifierProvider<GetByIdViewModel>(
           create: (context) => GetByIdViewModel(
             PrescriptionService(context.read<AuthService>()),
+          ),
+        ),
+        ChangeNotifierProvider<CreateHealthViewModel>(
+          create: (context) => CreateHealthViewModel(
+            HealthService(context.read<AuthService>()),
           ),
         ),
         ChangeNotifierProvider<UpdateStatusNotificationViewModel>(

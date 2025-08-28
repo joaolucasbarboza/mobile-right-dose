@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tcc/data/services/auth_service.dart';
+import 'package:tcc/ui/user/widgets/disease_screen.dart';
 
 class RegisterUserViewModel with ChangeNotifier {
   final AuthService authService;
@@ -25,10 +26,12 @@ class RegisterUserViewModel with ChangeNotifier {
         );
 
         if (token != null) {
-          Navigator.pushNamedAndRemoveUntil(
+          Navigator.pushAndRemoveUntil(
             context,
-            '/home',
-            (route) => false,
+            MaterialPageRoute(
+              builder: (context) => const DiseaseScreen(),
+            ),
+                (route) => false,
           );
 
           ScaffoldMessenger.of(context).showSnackBar(
@@ -36,18 +39,18 @@ class RegisterUserViewModel with ChangeNotifier {
               showCloseIcon: true,
               backgroundColor: Colors.green,
               content: Row(
-                children: [
-                  const Icon(
+                children: const [
+                  Icon(
                     Icons.check_outlined,
                     color: Colors.white,
                   ),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 10),
                   Text(
                     'Conta criada com sucesso!',
                     style: TextStyle(
                       color: Colors.white,
                     ),
-                  )
+                  ),
                 ],
               ),
               behavior: SnackBarBehavior.fixed,

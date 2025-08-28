@@ -9,6 +9,9 @@ class Routes {
   static const getPrescriptionById = "$apiUrl/prescriptions/{id}";
   static const addPrescription = "$apiUrl/prescriptions";
 
+  static const addDisease = "$apiUrl/user-diseases";
+  static const searchDisease = "$apiUrl/diseases";
+
   static const getAllUpcomingNotifications = "$apiUrl/prescriptions-notifications/upcoming-notifications";
 
   static const updatePrescriptionStatus = "$apiUrl/prescriptions-notifications/update-status";
