@@ -10,6 +10,7 @@ import 'custom_http_client.dart';
 class HealthService implements HealthRepository {
   final String addDiseaseUrl = Routes.addDisease;
   final String searchDiseaseUrl = Routes.searchDisease;
+  final String getDiseasesUrl = Routes.getAllDiseases;
 
   final CustomHttpClient _httpClient;
 
@@ -32,9 +33,17 @@ class HealthService implements HealthRepository {
   }
 
   @override
-  Future<List<String>> getDiseases() {
-    // TODO: implement getDiseases
-    throw UnimplementedError();
+  Future<List<Map<String, dynamic>>> getDiseases() async {
+    final uri = Uri.parse(getDiseasesUrl);
+
+    final response = await _httpClient.get(uri);
+
+      if (response.statusCode == 200) {
+        final jsonList = jsonDecode(utf8.decode(response.bodyBytes)) as List<dynamic>;
+        return List<Map<String, dynamic>>.from(jsonList);
+      } else {
+        throw Exception("Erro ao buscar doenças: ${response.statusCode}");
+      };
   }
 
   @override

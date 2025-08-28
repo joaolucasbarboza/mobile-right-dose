@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 class ButtonPrimaryComponent extends StatefulWidget {
   final String text;
   final bool isLoading;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   const ButtonPrimaryComponent({
     super.key,
     required this.text,
     required this.isLoading,
-    required this.onPressed,
+    this.onPressed,
   });
 
   @override

@@ -2,8 +2,7 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:tcc/ui/home/widgets/section_upcoming_notifications.dart';
 import 'package:tcc/ui/recommendationsAi/widgets/section_recommendations_component.dart';
-
-import '../user/widgets/login_screen.dart';
+import 'package:tcc/ui/user/widgets/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -58,10 +57,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             IconButton(
               onPressed: () {
-                Navigator.pushReplacement(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const LoginPage(),
+                    builder: (context) => const ProfileScreen(),
                   ),
                 );
               },

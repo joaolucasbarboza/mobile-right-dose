@@ -20,6 +20,7 @@ import 'package:tcc/ui/prescription/view_models/get_by_id_view_model.dart';
 import 'package:tcc/ui/prescription/view_models/update_status_notification_view_model.dart';
 import 'package:tcc/ui/recommendationsAi/view_model/generate_ai_view_model.dart';
 import 'package:tcc/ui/user/view_models/create_health_view_model.dart';
+import 'package:tcc/ui/user/view_models/get_user_disease_view_model.dart';
 import 'package:tcc/ui/user/view_models/login_user_view_model.dart';
 import 'package:tcc/ui/user/view_models/register_user_view_model.dart';
 import 'package:tcc/ui/user/widgets/forgot_password_screen.dart';
@@ -74,6 +75,11 @@ void main() async {
         ChangeNotifierProvider<GetAllMedicineViewModel>(
           create: (context) => GetAllMedicineViewModel(
             MedicineService(context.read<AuthService>()),
+          ),
+        ),
+        ChangeNotifierProvider<GetUserDiseaseViewModel>(
+          create: (context) => GetUserDiseaseViewModel(
+            HealthService(context.read<AuthService>()),
           ),
         ),
         ChangeNotifierProvider<LoginUserViewModel>(
@@ -135,6 +141,13 @@ class MyApp extends StatelessWidget {
           primary: Colors.blue,
           secondary: Colors.blueAccent,
           onPrimary: Colors.white,
+        ),
+        dividerTheme: const DividerThemeData(
+          color: Colors.grey,
+          thickness: 0.5,
+          space: 30,
+          indent: 40,
+          endIndent: 0,
         ),
       ),
       home: isLoggedIn ? const NavigationComponent() : const LoginPage(),
