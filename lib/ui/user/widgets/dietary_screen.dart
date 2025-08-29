@@ -1,27 +1,26 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tcc/models/dietary.dart';
 import 'package:tcc/ui/core/button_secondary_component.dart';
 import 'package:tcc/ui/core/input_component.dart';
 import 'package:tcc/ui/core/button_primary_component.dart';
 import 'package:tcc/ui/user/view_models/create_health_view_model.dart';
-import 'package:tcc/ui/user/widgets/dietary_screen.dart';
 import 'package:tcc/utils/custom_text_style.dart';
-import '../../../data/dto/disease_dto.dart';
 
-class DiseaseScreen extends StatefulWidget {
-  const DiseaseScreen({super.key});
+class DietaryScreen extends StatefulWidget {
+  const DietaryScreen({super.key});
 
   @override
-  State<DiseaseScreen> createState() => _DiseaseScreenState();
+  State<DietaryScreen> createState() => _DietaryScreenState();
 }
 
-class _DiseaseScreenState extends State<DiseaseScreen> {
+class _DietaryScreenState extends State<DietaryScreen> {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<CreateHealthViewModel>().loadAllDiseases();
+      context.read<CreateHealthViewModel>().loadAllDietaries();
     });
   }
 
@@ -34,7 +33,7 @@ class _DiseaseScreenState extends State<DiseaseScreen> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Form(
-            key: provider.formKey,
+            key: provider.formKeyDietary,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
               spacing: 26,
@@ -44,7 +43,7 @@ class _DiseaseScreenState extends State<DiseaseScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Você possui alguma doença?",
+                      "Você possui alguma restrição alimentar?",
                       style: customTextTitle(),
                     ),
                     Text(
@@ -57,22 +56,22 @@ class _DiseaseScreenState extends State<DiseaseScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 24,
                   children: [
-                    DropdownSearch<DiseaseDTO>(
-                      items: provider.searchResults,
-                      selectedItem: provider.selectedDisease,
+                    DropdownSearch<Dietary>(
+                      items: provider.dietarySearchResults,
+                      selectedItem: provider.selectedDietary,
                       itemAsString: (d) => d.description ?? '—',
                       compareFn: (a, b) => a.id == b.id,
                       onChanged: (d) {
                         if (d == null) return;
-                        provider.onDiseaseSelected(d);
+                        provider.onDietarySelected(d);
                         FocusScope.of(context).unfocus();
                       },
-                      validator: (d) => d == null ? 'Selecione uma doença' : null,
+                      validator: (d) => d == null ? 'Selecione uma restrição' : null,
                       enabled: !provider.isLoading,
                       dropdownDecoratorProps: DropDownDecoratorProps(
                         dropdownSearchDecoration: InputDecoration(
-                          labelText: 'Doença',
-                          hintText: 'Selecione uma doença',
+                          labelText: 'Restrição',
+                          hintText: 'Selecione uma restrição',
                           prefixIcon: const Icon(Icons.local_hospital_outlined),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -105,7 +104,7 @@ class _DiseaseScreenState extends State<DiseaseScreen> {
                         ),
                         searchFieldProps: TextFieldProps(
                           decoration: InputDecoration(
-                            hintText: 'Buscar doença...',
+                            hintText: 'Buscar restrução...',
                             prefixIcon: const Icon(Icons.search),
                             isDense: true,
                             focusedBorder: OutlineInputBorder(
@@ -151,14 +150,17 @@ class _DiseaseScreenState extends State<DiseaseScreen> {
                       obscureText: false,
                     ),
                     ButtonPrimaryComponent(
-                      onPressed: () {
-                        if (provider.formKey.currentState!.validate()) {
-                          provider.addDisease(context);
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => const DietaryScreen()),
-                            (route) => false,
-                          );
+                      onPressed: () async {
+                        if (provider.formKeyDietary.currentState!.validate()) {
+                          final success = await provider.addDietary(context);
+                          if (success && context.mounted) {
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              "/home",
+                                  (route) => false,
+                            );
+                          }
+                          // se não tiver sucesso, só fica na tela
                         }
                       },
                       isLoading: provider.isLoading,
@@ -169,7 +171,7 @@ class _DiseaseScreenState extends State<DiseaseScreen> {
                         Navigator.pushNamedAndRemoveUntil(
                           context,
                           '/home',
-                          (route) => false,
+                              (route) => false,
                         );
                       },
                       isLoading: provider.isLoading,
