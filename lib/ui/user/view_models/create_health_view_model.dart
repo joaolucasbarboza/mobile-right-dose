@@ -59,6 +59,29 @@ class CreateHealthViewModel extends ChangeNotifier {
   }
 
   Future<void> addDisease(BuildContext context) async {
+    if (!formKey.currentState!.validate()) return;
+
+    final selectedDisease = {
+      "diseaseId": _selectedDisease?.id,
+      "notes": notesController.text,
+    };
+
+    final result = await healthService.addDisease(selectedDisease);
+
+    if (result == 201) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Doença adicionada com sucesso!')),
+        );
+      }
+    } else {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao adicionar doença: $result')),
+        );
+      }
+    }
+
     if (kDebugMode) {
       print('Salvando: ${_selectedDisease?.description}, '
           'nome: ${diseaseNameController.text}, '

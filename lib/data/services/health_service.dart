@@ -18,7 +18,7 @@ class HealthService implements HealthRepository {
       : _httpClient = CustomHttpClient(authService);
 
   @override
-  Future<void> addDisease(Map<String, dynamic> diseaseData) async {
+  Future<int> addDisease(Map<String, dynamic> diseaseData) async {
 
     final response = await _httpClient.post(
       Uri.parse(addDiseaseUrl),
@@ -30,6 +30,8 @@ class HealthService implements HealthRepository {
         'Failed to add disease: ${response.statusCode} - ${response.body}',
       );
     }
+
+    return response.statusCode;
   }
 
   @override
