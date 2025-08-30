@@ -61,7 +61,7 @@ class _DiseaseScreenState extends State<DiseaseScreen> {
                     DropdownSearch<DiseaseDTO>(
                       items: provider.searchResults,
                       selectedItem: provider.selectedDisease,
-                      itemAsString: (d) => d.description ??,
+                      itemAsString: (d) => d.description,
                       compareFn: (a, b) => a.id == b.id,
                       onChanged: (d) {
                         if (d == null) return;
