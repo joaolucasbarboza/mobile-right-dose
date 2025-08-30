@@ -133,7 +133,7 @@ class _DiseaseScreenState extends State<DiseaseScreen> {
                           return Column(
                             children: [
                               ListTile(
-                                title: Text(item.description ??),
+                                title: Text(item.description),
                                 selected: isSelected,
                               ),
                               const Divider(
