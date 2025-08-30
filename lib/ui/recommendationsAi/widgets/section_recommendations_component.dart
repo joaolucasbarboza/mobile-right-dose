@@ -1,71 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:tcc/models/recommendation.dart';
 import 'package:tcc/ui/core/button_primary_component.dart';
+import 'package:tcc/ui/core/button_secondary_component.dart';
 import 'package:tcc/ui/recommendationsAi/widgets/recommendations_screen.dart';
 import 'package:tcc/utils/custom_text_style.dart';
-
 import '../../../models/meals.dart';
 import '../view_model/generate_ai_view_model.dart';
 
-class SectionRecommendationsComponent extends StatefulWidget {
-  const SectionRecommendationsComponent({super.key});
+// ==== só mudou o construtor e removemos o initState ====
+class SectionRecommendationsComponent extends StatelessWidget {
+  final GenerateAiViewModel viewModel;
 
-  @override
-  State<SectionRecommendationsComponent> createState() => _SectionRecommendationsComponentState();
-}
+  const SectionRecommendationsComponent({super.key, required this.viewModel});
 
-class _SectionRecommendationsComponentState extends State<SectionRecommendationsComponent> {
   static final _dateFormat = DateFormat('dd/MM/yyyy HH:mm');
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<GenerateAiViewModel>();
+    return AnimatedBuilder(
+      animation: viewModel,
+      builder: (context, _) {
+        Widget body;
+        if (viewModel.isLoading && viewModel.data == null) {
+          body = const _Skeleton();
+        } else if (viewModel.error != null && viewModel.data == null) {
+          body = _ErrorState(
+            message: viewModel.error!,
+            onRetry: () => viewModel.generateRecommendation(),
+          );
+        } else if (viewModel.data == null) {
+          body = _EmptyState(onRefresh: () => viewModel.generateRecommendation());
+        } else {
+          body = _RecommendationView(data: viewModel.data!, df: _dateFormat);
+        }
 
-    Widget body;
-    if (viewModel.isLoading && viewModel.data == null) {
-      body = const _Skeleton();
-    } else if (viewModel.error != null && viewModel.data == null) {
-      body = _ErrorState(
-        message: viewModel.error!,
-        onRetry: () => viewModel.generateRecommendation(),
-      );
-    } else if (viewModel.data == null) {
-      body = _EmptyState(onRefresh: () => viewModel.generateRecommendation());
-    } else {
-      body = _RecommendationView(data: viewModel.data!, df: _dateFormat);
-    }
-
-    return Padding(
-      padding: const EdgeInsets.all(14),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _Header(
-            dateFormat: _dateFormat,
-            data: viewModel.data,
-            onRefresh: () => viewModel.generateRecommendation(),
-            trailing: viewModel.isLoading
-                ? const SizedBox(
-              width: 18,
-              height: 18,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            )
-                : null,
-          ),
-          const SizedBox(height: 12),
-          ConstrainedBox(
-            constraints: const BoxConstraints(minHeight: 120, minWidth: 250),
-            child: body,
-          ),
-        ],
-      ),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _Header(
+              dateFormat: _dateFormat,
+              data: viewModel.data,
+              onRefresh: () => viewModel.generateRecommendation(),
+              trailing: viewModel.isLoading
+                  ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
+                  : null,
+            ),
+            const SizedBox(height: 12),
+            ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: 120, minWidth: 250),
+              child: body,
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -73,7 +62,7 @@ class _SectionRecommendationsComponentState extends State<SectionRecommendations
 class _Header extends StatelessWidget {
   final VoidCallback onRefresh;
   final Widget? trailing;
-  final Recommendation? data; // <-- agora é opcional
+  final Recommendation? data;
   final DateFormat dateFormat;
 
   const _Header({
@@ -98,23 +87,18 @@ class _Header extends StatelessWidget {
                   style: customTextLabel(),
                 )
               else
-                Text(
-                  'Ainda não gerado',
-                  style: customTextLabel(),
-                ),
+                Text('Ainda não gerado', style: customTextLabel()),
             ],
           ),
         ),
-        IconButton(
-          tooltip: 'Atualizar',
-          onPressed: onRefresh,
-          icon: const Icon(Icons.refresh),
-        ),
+        IconButton(tooltip: 'Atualizar', onPressed: onRefresh, icon: const Icon(Icons.refresh)),
         if (trailing != null) trailing!,
       ],
     );
   }
 }
+
+// ===== (restante do arquivo permanece igual) =====
 
 class _RecommendationView extends StatelessWidget {
   final Recommendation data;
@@ -126,28 +110,7 @@ class _RecommendationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-      _MealsList(meals: data.meals, alerts: data.alerts, substitutions: data.substitutions),
-        //
-        // if (data.alerts.isNotEmpty) ...[
-        //   const SizedBox(height: 16),
-        //   _SectionTitle('Alertas'),
-        //   const SizedBox(height: 8),
-        //   _BulletList(items: data.alerts, icon: Icons.priority_high_rounded),
-        // ],
-
-        // if (data.substitutions.isNotEmpty) ...[
-        //   const SizedBox(height: 16),
-        //   _SectionTitle('Substituições sugeridas'),
-        //   const SizedBox(height: 8),
-        //   _Chips(items: data.substitutions),
-        // ],
-        //
-        // if (data.profileApplied.isNotEmpty) ...[
-        //   const SizedBox(height: 16),
-        //   _SectionTitle('Perfil considerado'),
-        //   const SizedBox(height: 8),
-        //   _KeyValueGrid(map: data.profileApplied),
-        // ],
+        _MealsList(meals: data.meals, alerts: data.alerts, substitutions: data.substitutions),
       ],
     );
   }
@@ -175,23 +138,15 @@ class _MealsList extends StatelessWidget {
     return Column(
       children: [
         Column(
-          children: rows.asMap().entries.map((entry) {
-            final e = entry.value;
-
+          children: rows.map((e) {
             return Column(
               children: [
                 ListTile(
                   tileColor: Colors.white,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   leading: Icon(e.icon, color: c.primary),
-                  title: Text(
-                    e.label,
-                    style: TextStyle(fontWeight: FontWeight.w600, color: c.onSurface),
-                  ),
-                  subtitle: Text(
-                    e.value,
-                    style: TextStyle(color: c.onSurfaceVariant),
-                  ),
+                  title: Text(e.label, style: TextStyle(fontWeight: FontWeight.w600, color: c.onSurface)),
+                  subtitle: Text(e.value, style: TextStyle(color: c.onSurfaceVariant)),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                     side: BorderSide(color: c.outlineVariant, width: 0.5),
@@ -200,20 +155,18 @@ class _MealsList extends StatelessWidget {
                   onTap: () {
                     showModalBottomSheet(
                       context: context,
-                      builder: (context) {
-                        return Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(e.label, style: Theme.of(context).textTheme.titleMedium),
-                              const SizedBox(height: 8),
-                              Text(e.value, style: Theme.of(context).textTheme.bodyMedium),
-                            ],
-                          ),
-                        );
-                      },
+                      builder: (context) => Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(e.label, style: Theme.of(context).textTheme.titleMedium),
+                            const SizedBox(height: 8),
+                            Text(e.value, style: Theme.of(context).textTheme.bodyMedium),
+                          ],
+                        ),
+                      ),
                     );
                   },
                 ),
@@ -222,11 +175,18 @@ class _MealsList extends StatelessWidget {
             );
           }).toList(),
         ),
-        ButtonPrimaryComponent(text: "Ver detalhes", isLoading: false, onPressed: () {
-          Navigator.push(context, MaterialPageRoute(
-            builder: (context) => RecommendationsScreen(meals: meals, alerts: alerts, substitutions: substitutions),
-          ));
-        })
+        ButtonPrimaryComponent(
+          text: "Ver detalhes",
+          isLoading: false,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => RecommendationsScreen(meals: meals, alerts: alerts, substitutions: substitutions),
+              ),
+            );
+          },
+        ),
       ],
     );
   }
@@ -234,7 +194,6 @@ class _MealsList extends StatelessWidget {
 
 class _EmptyState extends StatelessWidget {
   final Future<void> Function() onRefresh;
-
   const _EmptyState({required this.onRefresh});
 
   @override
@@ -242,22 +201,18 @@ class _EmptyState extends StatelessWidget {
     final c = Theme.of(context).colorScheme;
     return ListView(
       shrinkWrap: true,
-      physics: const AlwaysScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       children: [
         Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 24),
             child: Column(
               children: [
-                Icon(Icons.inbox_outlined, size: 40, color: c.outline),
+                Icon(LucideIcons.network, size: 40, color: c.outline),
                 const SizedBox(height: 8),
                 Text('Nenhuma recomendação no momento', style: TextStyle(color: c.onSurfaceVariant)),
                 const SizedBox(height: 12),
-                OutlinedButton.icon(
-                  onPressed: onRefresh,
-                  icon: const Icon(Icons.refresh),
-                  label: const Text('Atualizar'),
-                ),
+                ButtonSecondaryComponent(text: "Gerar recomendações", isLoading: false, onPressed: onRefresh)
               ],
             ),
           ),
@@ -270,7 +225,6 @@ class _EmptyState extends StatelessWidget {
 class _ErrorState extends StatelessWidget {
   final String message;
   final VoidCallback onRetry;
-
   const _ErrorState({required this.message, required this.onRetry});
 
   @override
@@ -305,7 +259,7 @@ class _Skeleton extends StatelessWidget {
     return Column(
       children: List.generate(
         3,
-        (_) => Container(
+            (_) => Container(
           margin: const EdgeInsets.only(bottom: 8),
           height: 72,
           decoration: BoxDecoration(

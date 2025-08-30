@@ -6,6 +6,7 @@ abstract class HealthRepository {
   Future<int> addDisease(Map<String, dynamic> diseaseData);
   Future<List<DiseaseDTO>> searchDiseases();
 
-  Future<List<Dietary>> searchDietaries();
+  Future<List<Map<String, dynamic>>> getDietaries();
   Future<int> addDietary(Map<String, dynamic> dietaryData);
+  Future<List<Dietary>> searchDietaries();
 }

@@ -30,6 +30,7 @@ class _DiseaseScreenState extends State<DiseaseScreen> {
     final provider = context.watch<CreateHealthViewModel>();
 
     return Scaffold(
+      appBar: AppBar(),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -60,7 +61,7 @@ class _DiseaseScreenState extends State<DiseaseScreen> {
                     DropdownSearch<DiseaseDTO>(
                       items: provider.searchResults,
                       selectedItem: provider.selectedDisease,
-                      itemAsString: (d) => d.description ?? '—',
+                      itemAsString: (d) => d.description ??,
                       compareFn: (a, b) => a.id == b.id,
                       onChanged: (d) {
                         if (d == null) return;
@@ -132,7 +133,7 @@ class _DiseaseScreenState extends State<DiseaseScreen> {
                           return Column(
                             children: [
                               ListTile(
-                                title: Text(item.description ?? '—'),
+                                title: Text(item.description ??),
                                 selected: isSelected,
                               ),
                               const Divider(

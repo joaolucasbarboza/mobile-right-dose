@@ -1,12 +1,16 @@
 import 'package:tcc/models/dietary.dart';
 
 class UserDietary {
+  final int id;
+  final int userId;
   final Dietary dietary;
   final String? notes;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
   UserDietary({
+    required this.id,
+    required this.userId,
     required this.dietary,
     this.notes,
     this.createdAt,
@@ -15,7 +19,9 @@ class UserDietary {
 
   factory UserDietary.fromJson(Map<String, dynamic> json) {
     return UserDietary(
-      dietary: Dietary.fromJson(json['dietary']),
+      id: json['id'],
+      userId: json['userId'],
+      dietary: Dietary.fromJson(json['dietaryRestriction']),
       notes: json['notes'],
       createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
       updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,

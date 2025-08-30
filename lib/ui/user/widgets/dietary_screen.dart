@@ -29,6 +29,7 @@ class _DietaryScreenState extends State<DietaryScreen> {
     final provider = context.watch<CreateHealthViewModel>();
 
     return Scaffold(
+      appBar: AppBar(),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
@@ -59,7 +60,7 @@ class _DietaryScreenState extends State<DietaryScreen> {
                     DropdownSearch<Dietary>(
                       items: provider.dietarySearchResults,
                       selectedItem: provider.selectedDietary,
-                      itemAsString: (d) => d.description ?? '—',
+                      itemAsString: (d) => d.description,
                       compareFn: (a, b) => a.id == b.id,
                       onChanged: (d) {
                         if (d == null) return;
@@ -131,7 +132,7 @@ class _DietaryScreenState extends State<DietaryScreen> {
                           return Column(
                             children: [
                               ListTile(
-                                title: Text(item.description ?? '—'),
+                                title: Text(item.description),
                                 selected: isSelected,
                               ),
                               const Divider(

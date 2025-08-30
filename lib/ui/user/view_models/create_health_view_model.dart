@@ -78,7 +78,7 @@ class CreateHealthViewModel extends ChangeNotifier {
       _searchResults = _allDiseases
           .where((d) =>
       (d.description.toLowerCase().contains(q)) ||
-          (d.description.toLowerCase().contains(q) ?? false))
+          (d.description.toLowerCase().contains(q)))
           .toList();
     }
     notifyListeners();
@@ -91,8 +91,8 @@ class CreateHealthViewModel extends ChangeNotifier {
     } else {
       _searchDietaryResults = _allDietaries
           .where((d) =>
-      ((d.description ?? '').toLowerCase().contains(q)) ||
-          ((d.description ?? '').toLowerCase().contains(q)))
+      ((d.description).toLowerCase().contains(q)) ||
+          ((d.description).toLowerCase().contains(q)))
           .toList();
     }
     notifyListeners();
@@ -106,7 +106,7 @@ class CreateHealthViewModel extends ChangeNotifier {
 
   void onDietarySelected(Dietary d) {
     _selectedDietary = d;
-    dietaryNameController.text = d.description ?? '';
+    dietaryNameController.text = d.description;
     notifyListeners();
   }
 

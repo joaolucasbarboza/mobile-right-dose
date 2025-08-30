@@ -7,10 +7,10 @@ import 'package:tcc/data/services/health_service.dart';
 import 'package:tcc/models/disease.dart';
 import 'package:tcc/models/userDietary.dart';
 
-class GetUserDiseaseViewModel extends ChangeNotifier {
+class GetUserViewModel extends ChangeNotifier {
   final HealthService _healthService;
 
-  GetUserDiseaseViewModel(this._healthService);
+  GetUserViewModel(this._healthService);
 
   final List<Disease> _userDiseases = [];
   final List<UserDietary> _userDietaries = [];
@@ -60,9 +60,9 @@ class GetUserDiseaseViewModel extends ChangeNotifier {
   }
 
   List<T> toList<T>(
-    List<Map<String, dynamic>> response,
-    T Function(Map<String, dynamic>) fromJson,
-  ) {
+      List<Map<String, dynamic>> response,
+      T Function(Map<String, dynamic>) fromJson,
+      ) {
     return response.map((e) => fromJson(e)).toList();
   }
 }

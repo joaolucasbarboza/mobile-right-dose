@@ -5,7 +5,8 @@ class ButtonSecondaryComponent extends StatefulWidget {
   final String text;
   final bool isLoading;
   final VoidCallback onPressed;
-  final bool isLogout; // 👈 novo parâmetro
+  final bool isLogout;
+  final IconData? icon;
 
   const ButtonSecondaryComponent({
     super.key,
@@ -13,6 +14,7 @@ class ButtonSecondaryComponent extends StatefulWidget {
     required this.isLoading,
     required this.onPressed,
     this.isLogout = false,
+    this.icon,
   });
 
   @override
@@ -44,8 +46,11 @@ class _ButtonSecondaryComponentState extends State<ButtonSecondaryComponent> {
             : Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (widget.isLogout) ...[
-              const Icon(Icons.logout_outlined, size: 20),
+            if (widget.isLogout || widget.icon != null) ...[
+              Icon(
+                widget.icon ?? Icons.logout_outlined,
+                size: 26,
+              ),
               const SizedBox(width: 8),
             ],
             Text(

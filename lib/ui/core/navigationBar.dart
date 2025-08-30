@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:tcc/ui/prescription/widgets/prescriptions_screen.dart';
 import 'package:tcc/ui/core/setting_screen.dart';
 
@@ -14,6 +15,8 @@ class NavigationComponent extends StatefulWidget {
 
 class _NavigationComponentState extends State<NavigationComponent> {
   int currentPageIndex = 0;
+  double sizeIcon = 22;
+  double sizeBig = 26;
 
   final List<Widget> pages = [
     const HomeScreen(),
@@ -29,32 +32,32 @@ class _NavigationComponentState extends State<NavigationComponent> {
       bottomNavigationBar: ClipRRect(
         child: NavigationBar(
           height: 60,
-          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+          labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
           onDestinationSelected: (int index) {
             setState(() {
               currentPageIndex = index;
             });
           },
           selectedIndex: currentPageIndex,
-          destinations: const <Widget>[
+          destinations: [
             NavigationDestination(
-              icon: Icon(Icons.home_outlined),
-              selectedIcon: Icon(Icons.home_rounded),
+              icon: Icon(LucideIcons.house500, size: sizeBig,),
+              selectedIcon: Icon(LucideIcons.house600, size: sizeIcon),
               label: 'Inicio',
             ),
             NavigationDestination(
-              icon: Icon(Icons.calendar_month_outlined),
-              selectedIcon: Icon(Icons.calendar_month_rounded),
+              icon: Icon(LucideIcons.calendar500, size: sizeBig),
+              selectedIcon: Icon(LucideIcons.calendar600, size: sizeIcon),
               label: 'Prescrições',
             ),
             NavigationDestination(
-              icon: Icon(Icons.medication_outlined),
-              selectedIcon: Icon(Icons.medication_rounded),
+              icon: Icon(LucideIcons.pill500, size: sizeBig),
+              selectedIcon: Icon(LucideIcons.pill600, size: sizeIcon),
               label: 'Remédios',
             ),
             NavigationDestination(
-              icon: Icon(Icons.settings_outlined),
-              selectedIcon: Icon(Icons.settings_rounded),
+              icon: Icon(LucideIcons.settings500, size: sizeBig),
+              selectedIcon: Icon(LucideIcons.settings600, size: sizeIcon),
               label: 'Configurações',
             ),
           ],

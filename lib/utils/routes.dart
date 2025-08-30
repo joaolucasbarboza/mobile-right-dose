@@ -1,5 +1,5 @@
 class Routes {
-  static const apiUrl = "http://192.168.0.13:8080";
+  static const apiUrl = "http://192.168.0.15:8080";
   static const authLogin = "$apiUrl/auth/login";
   static const authRegister = "$apiUrl/auth/register";
 
@@ -15,6 +15,7 @@ class Routes {
 
   static const searchDietary = "$apiUrl/dietaries";
   static const addDietary = "$apiUrl/user-dietary-restrictions";
+  static const getAllDietaries = "$apiUrl/user-dietary-restrictions";
 
   static const getAllUpcomingNotifications = "$apiUrl/prescriptions-notifications/upcoming-notifications";
 

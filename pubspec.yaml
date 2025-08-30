@@ -44,6 +44,7 @@ dependencies:
   firebase_messaging: ^15.2.7
   flutter_local_notifications: ^19.3.0
   dropdown_search: ^5.0.6
+  lucide_icons_flutter: ^3.0.9
 
 dev_dependencies:
   flutter_test:
