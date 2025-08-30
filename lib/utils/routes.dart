@@ -3,6 +3,8 @@ class Routes {
   static const authLogin = "$apiUrl/auth/login";
   static const authRegister = "$apiUrl/auth/register";
 
+  static const getUser = "$apiUrl/user";
+
   static const getMedicine = "$apiUrl/medicine";
 
   static const getPrescription = "$apiUrl/prescriptions";

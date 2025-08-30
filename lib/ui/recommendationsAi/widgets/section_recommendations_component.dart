@@ -9,7 +9,6 @@ import 'package:tcc/utils/custom_text_style.dart';
 import '../../../models/meals.dart';
 import '../view_model/generate_ai_view_model.dart';
 
-// ==== só mudou o construtor e removemos o initState ====
 class SectionRecommendationsComponent extends StatelessWidget {
   final GenerateAiViewModel viewModel;
 
@@ -91,14 +90,13 @@ class _Header extends StatelessWidget {
             ],
           ),
         ),
-        IconButton(tooltip: 'Atualizar', onPressed: onRefresh, icon: const Icon(Icons.refresh)),
+        IconButton(tooltip: 'Atualizar', onPressed: onRefresh, icon: const Icon(LucideIcons.loaderCircle500)),
         if (trailing != null) trailing!,
       ],
     );
   }
 }
 
-// ===== (restante do arquivo permanece igual) =====
 
 class _RecommendationView extends StatelessWidget {
   final Recommendation data;
@@ -128,11 +126,11 @@ class _MealsList extends StatelessWidget {
     final c = Theme.of(context).colorScheme;
 
     final rows = <({IconData icon, String label, String value})>[
-      (icon: Icons.wb_sunny_outlined, label: 'Café da manhã', value: meals.breakfast),
-      (icon: Icons.lunch_dining_outlined, label: 'Almoço', value: meals.lunch),
-      (icon: Icons.dinner_dining_outlined, label: 'Jantar', value: meals.dinner),
-      (icon: Icons.free_breakfast_outlined, label: 'Lanche da manhã', value: meals.snackMorning),
-      (icon: Icons.local_cafe_outlined, label: 'Lanche da tarde', value: meals.snackAfternoon),
+      (icon: LucideIcons.sun500, label: 'Café da manhã', value: meals.breakfast),
+      (icon: LucideIcons.sandwich500, label: 'Almoço', value: meals.lunch),
+      (icon: LucideIcons.moon500, label: 'Jantar', value: meals.dinner),
+      (icon: LucideIcons.coffee500, label: 'Lanche da manhã', value: meals.snackMorning),
+      (icon: LucideIcons.coffee500, label: 'Lanche da tarde', value: meals.snackAfternoon),
     ].where((e) => e.value.trim().isNotEmpty).toList();
 
     return Column(
@@ -212,7 +210,7 @@ class _EmptyState extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text('Nenhuma recomendação no momento', style: TextStyle(color: c.onSurfaceVariant)),
                 const SizedBox(height: 12),
-                ButtonSecondaryComponent(text: "Gerar recomendações", isLoading: false, onPressed: onRefresh)
+                ButtonSecondaryComponent(icon: LucideIcons.brain300, text: "Gerar recomendações", isLoading: false, onPressed: onRefresh)
               ],
             ),
           ),
@@ -236,7 +234,7 @@ class _ErrorState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.error_outline_rounded, size: 40, color: c.error),
+            Icon(LucideIcons.bug500, size: 40, color: c.error),
             const SizedBox(height: 8),
             Text('Falha ao carregar recomendações', style: TextStyle(color: c.onSurface, fontWeight: FontWeight.w600)),
             const SizedBox(height: 4),

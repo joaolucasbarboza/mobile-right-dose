@@ -3,66 +3,34 @@
 //  dependendo do quantas doenças, tem que ser proporcional POST no backend. Fazer um for talvez?
 
 import 'package:flutter/material.dart';
-import 'package:tcc/data/services/health_service.dart';
-import 'package:tcc/models/disease.dart';
-import 'package:tcc/models/userDietary.dart';
+import 'package:tcc/data/services/user_service.dart';
+
+import '../../../models/user.dart';
 
 class GetUserViewModel extends ChangeNotifier {
-  final HealthService _healthService;
+  final UserService _userService;
 
-  GetUserViewModel(this._healthService);
-
-  final List<Disease> _userDiseases = [];
-  final List<UserDietary> _userDietaries = [];
-
-  List<Disease> get prescriptions => _userDiseases;
-
-  List<UserDietary> get userDietaries => _userDietaries;
+  GetUserViewModel(
+    this._userService,
+  );
 
   bool isLoading = false;
-  String? errorMessage;
+  User _user = User(userId: '', name: '', email: '', role: '');
 
-  Future<void> loadUserDiseases() async {
+  User get user => _user;
+
+  Future<void> fetchUser() async {
     isLoading = true;
     notifyListeners();
 
     try {
-      final response = await _healthService.getDiseases();
-      final diseases = toList<Disease>(response, (e) => Disease.fromJson(e));
-      _userDiseases
-        ..clear()
-        ..addAll(diseases);
+      final response = await _userService.getDetailsUser();
+      _user = User.fromJson(response);
     } catch (e) {
-      errorMessage = 'Failed to load diseases: $e';
+      debugPrint("Erro ao buscar o usuário: $e\n");
     } finally {
       isLoading = false;
       notifyListeners();
     }
-  }
-
-  Future<void> loadUserDietaries() async {
-    isLoading = true;
-    notifyListeners();
-
-    try {
-      final response = await _healthService.getDietaries();
-      print(response);
-      final userDietaries = toList<UserDietary>(response, (e) => UserDietary.fromJson(e));
-      _userDietaries
-        ..clear()
-        ..addAll(userDietaries);
-    } catch (e) {
-      errorMessage = 'Failed to load diseases: $e';
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  List<T> toList<T>(
-      List<Map<String, dynamic>> response,
-      T Function(Map<String, dynamic>) fromJson,
-      ) {
-    return response.map((e) => fromJson(e)).toList();
   }
 }

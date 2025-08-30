@@ -11,6 +11,7 @@ import 'package:tcc/data/services/medicine_service.dart';
 import 'package:tcc/data/services/notification_service.dart';
 import 'package:tcc/data/services/prescription_service.dart';
 import 'package:tcc/data/services/recommendation_service.dart';
+import 'package:tcc/data/services/user_service.dart';
 import 'package:tcc/ui/core/navigationBar.dart';
 import 'package:tcc/ui/medicine/view_models/get_all_medicine_view_model.dart';
 import 'package:tcc/ui/notification/view_models/get_all_upcoming_notifications_view_model.dart';
@@ -21,6 +22,7 @@ import 'package:tcc/ui/prescription/view_models/update_status_notification_view_
 import 'package:tcc/ui/recommendationsAi/view_model/generate_ai_view_model.dart';
 import 'package:tcc/ui/user/view_models/create_health_view_model.dart';
 import 'package:tcc/ui/user/view_models/get_user_disease_view_model.dart';
+import 'package:tcc/ui/user/view_models/get_user_view_model.dart';
 import 'package:tcc/ui/user/view_models/login_user_view_model.dart';
 import 'package:tcc/ui/user/view_models/register_user_view_model.dart';
 import 'package:tcc/ui/user/widgets/forgot_password_screen.dart';
@@ -63,10 +65,14 @@ void main() async {
             PrescriptionService(context.read<AuthService>()),
           ),
         ),
+        ChangeNotifierProvider<GetUserViewModel>(
+          create: (context) => GetUserViewModel(UserService(context.read<AuthService>())),
+        ),
         ChangeNotifierProvider<GenerateAiViewModel>(
-            create: (context) => GenerateAiViewModel(
-                  RecommendationService(context.read<AuthService>()),
-                )),
+          create: (context) => GenerateAiViewModel(
+            RecommendationService(context.read<AuthService>()),
+          ),
+        ),
         ChangeNotifierProvider<GetAllUpcomingNotificationsViewModel>(
           create: (context) => GetAllUpcomingNotificationsViewModel(
             PrescriptionNotificationService(context.read<AuthService>()),

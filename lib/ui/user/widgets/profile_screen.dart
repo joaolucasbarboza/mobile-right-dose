@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:tcc/data/services/auth_service.dart';
 import 'package:tcc/ui/core/button_secondary_component.dart';
@@ -7,11 +8,13 @@ import 'package:tcc/ui/user/widgets/dietary_screen.dart';
 import 'package:tcc/ui/user/widgets/disease_screen.dart';
 
 import '../../../data/services/health_service.dart';
+import '../../../models/user.dart';
 import '../../../utils/custom_text_style.dart';
 import '../view_models/get_user_disease_view_model.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final User? user;
+  const ProfileScreen({super.key, this.user});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -83,7 +86,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     Text("Meu perfil", style: customTextTitle()),
                     const SizedBox(height: 16),
-                    ProfileInfoCard(),
+                    ProfileInfoCard(user: widget.user!,),
                     Divider(
                       color: colorDivider,
                       height: 60,
@@ -118,7 +121,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ButtonSecondaryComponent(
                               text: "Adicionar doença",
                               isLoading: _viewModel.isLoading,
-                              icon: Icons.add_rounded,
+                              icon: LucideIcons.plus500,
                               onPressed: () {
                                 Navigator.push(
                                   context,
@@ -173,7 +176,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ButtonSecondaryComponent(
                               text: "Adicionar restrição alimentar",
                               isLoading: _viewModel.isLoading,
-                              icon: Icons.add_rounded,
+                              icon: LucideIcons.plus500,
                               onPressed: () {
                                 Navigator.push(
                                   context,

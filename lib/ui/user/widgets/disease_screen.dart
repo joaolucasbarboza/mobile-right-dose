@@ -1,5 +1,6 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:tcc/ui/core/button_secondary_component.dart';
 import 'package:tcc/ui/core/input_component.dart';
@@ -166,6 +167,7 @@ class _DiseaseScreenState extends State<DiseaseScreen> {
                       text: "Próximo",
                     ),
                     ButtonSecondaryComponent(
+                      icon: LucideIcons.house300,
                       onPressed: () {
                         Navigator.pushNamedAndRemoveUntil(
                           context,

@@ -10,16 +10,12 @@ class GetAllPrescriptionViewModel with ChangeNotifier {
   );
 
   bool isLoading = false;
-  // bool _isFetching = false;
   final List<Prescription> _prescriptions = [];
 
   List<Prescription> get prescriptions => _prescriptions;
 
   Future<void> fetchPrescriptions() async {
-    // if (_isFetching) return;
-
     isLoading = true;
-    // _isFetching = true;
     notifyListeners();
 
     try {

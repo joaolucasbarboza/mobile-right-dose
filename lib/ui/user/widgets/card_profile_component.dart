@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:tcc/ui/core/button_secondary_component.dart';
 
-class ProfileInfoCard extends StatelessWidget {
-  const ProfileInfoCard({super.key});
+import '../../../models/user.dart';
 
+class ProfileInfoCard extends StatefulWidget {
+  final User user;
+  const ProfileInfoCard({super.key, required this.user});
+
+  @override
+  State<ProfileInfoCard> createState() => _ProfileInfoCardState();
+}
+
+class _ProfileInfoCardState extends State<ProfileInfoCard> {
   @override
   Widget build(BuildContext context) {
     final c = Theme.of(context).colorScheme;
@@ -26,13 +35,10 @@ class ProfileInfoCard extends StatelessWidget {
                 CircleAvatar(
                   radius: 28,
                   backgroundColor: c.primaryContainer,
+
                   child: Text(
-                    "JL", // placeholder das iniciais
-                    style: TextStyle(
-                      color: c.onPrimaryContainer,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 18,
-                    ),
+                    widget.user.name.isNotEmpty ? widget.user.name[0].toUpperCase() : '?',
+                    style: TextStyle(fontSize: 24, color: Colors.black, fontWeight: FontWeight.bold),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -41,14 +47,14 @@ class ProfileInfoCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Nome do Usuário",
+                        widget.user.name,
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        "email@exemplo.com",
+                        widget.user.email,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Theme.of(context)
                               .textTheme
@@ -60,22 +66,15 @@ class ProfileInfoCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(width: 8),
-                IconButton(
-                  tooltip: 'Editar perfil',
-                  onPressed: () {},
-                  icon: const Icon(Icons.edit_outlined),
-                ),
               ],
             ),
-            const SizedBox(height: 12),
-            const Divider(height: 1),
-            const SizedBox(height: 12),
+            const Divider(height: 32, indent: 0,),
             Column(
               spacing: 12,
               children: [
-                ButtonSecondaryComponent(text: "Editar perfil", isLoading: false, onPressed: () {}),
+                ButtonSecondaryComponent(icon: LucideIcons.pencil300, text: "Editar perfil", isLoading: false, onPressed: () {}),
                 ButtonSecondaryComponent(
+                  icon: LucideIcons.logOut,
                   text: "Sair",
                   isLoading: false,
                   isLogout: true,

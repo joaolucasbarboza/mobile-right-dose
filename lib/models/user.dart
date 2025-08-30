@@ -3,23 +3,25 @@ class User {
   final String name;
   final String email;
   final String role;
-  final DateTime createdAt;
+  final DateTime? createdAt;
 
   User({
     required this.userId,
     required this.name,
     required this.email,
     required this.role,
-    required this.createdAt,
+    this.createdAt,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      userId: json['userId'],
-      name: json['name'],
-      email: json['email'],
-      role: json['role'],
-      createdAt: DateTime.parse(json['createdAt']),
+      userId: json['userId'] as String? ?? '',
+      name: json['name'] as String? ?? '',
+      email: json['email'] as String? ?? '',
+      role: json['role'] as String? ?? '',
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'] as String)
+          : null,
     );
   }
 
@@ -29,7 +31,7 @@ class User {
       'name': name,
       'email': email,
       'role': role,
-      'createdAt': createdAt.toIso8601String(),
+      'createdAt': createdAt?.toIso8601String(),
     };
   }
 }

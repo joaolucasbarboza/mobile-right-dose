@@ -1,13 +1,16 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:tcc/ui/core/button_primary_component.dart';
-import 'package:tcc/ui/core/button_secondary_component.dart';
-import 'package:tcc/ui/prescription/view_models/update_status_notification_view_model.dart';
-import 'package:tcc/utils/custom_text_style.dart';
+
 import '../../../models/prescription_notification.dart';
+import '../../../utils/custom_text_style.dart';
+import '../../core/button_primary_component.dart';
+import '../../core/button_secondary_component.dart';
+import '../../prescription/view_models/update_status_notification_view_model.dart';
 
 class ListViewNotificationsWithPrescription extends StatelessWidget {
   final List<PrescriptionNotification> notifications;
@@ -24,6 +27,9 @@ class ListViewNotificationsWithPrescription extends StatelessWidget {
   Widget build(BuildContext context) {
     final parentContext = context;
     final updateStatusNotifier = Provider.of<UpdateStatusNotificationViewModel>(context, listen: true);
+
+    final random = Random();
+
     return Column(
       children: [
         Column(
@@ -31,7 +37,6 @@ class ListViewNotificationsWithPrescription extends StatelessWidget {
             final formattedDate = _dateFormat.format(notification.notificationTime);
             final formattedTime = _timeFormat.format(notification.notificationTime);
 
-            const colorGray = Color(0xFFF4F4F4);
             const confirmedStatus = 'CONFIRMED';
 
             const sizeIcon = 28.0;
@@ -42,20 +47,26 @@ class ListViewNotificationsWithPrescription extends StatelessWidget {
             return Column(
               children: [
                 ListTile(
+                  iconColor: Colors.grey.shade500,
                   minVerticalPadding: 16,
                   enableFeedback: true,
-                  tileColor: colorGray,
+                  tileColor: Colors.grey.shade100,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  leading: const Icon(Icons.notifications_none_rounded),
-                  trailing: const Icon(Icons.navigate_next_rounded),
+                  leading: Icon(LucideIcons.bell300, size: 28,),
+                  trailing: Icon(LucideIcons.chevronRight500),
                   title: Text(
                     '${notification.medicineName} - ${notification.dosageAmount} ${notification.dosageUnit}',
-                    style: customTextLabel2(),
+                    style: TextStyle(color: Colors.grey.shade600, fontWeight: FontWeight.w600, fontSize: 16),
                   ),
                   subtitle: Text(
                     '$formattedDate - $formattedTime',
+                    style: customTextLabel2(),
                   ),
                   shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                      color: Colors.grey.shade300,
+                      width: 1.5,
+                    ),
                     borderRadius: BorderRadius.circular(18),
                   ),
                   onTap: () => {
@@ -197,21 +208,27 @@ class ListViewNotificationsWithPrescription extends StatelessWidget {
         ),
         notifications.isEmpty
             ? Container(
-                alignment: Alignment.center,
-                height: 120,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.notifications_off_outlined,
-                      size: 40,
-                      color: Colors.grey,
-                    ),
-                    Text("Nenhum lembrete encontrado"),
-                  ],
-                ),
-              )
-            : ButtonSecondaryComponent(text: "Ver todos os lembretes", isLoading: false, onPressed: () => {})
+          alignment: Alignment.center,
+          height: 120,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Icon(
+                Icons.notifications_off_outlined,
+                size: 40,
+                color: Colors.grey,
+              ),
+              Text("Nenhum lembrete encontrado"),
+            ],
+          ),
+        )
+            : ButtonSecondaryComponent(
+          icon: LucideIcons.galleryVerticalEnd,
+          text: "Ver todos os lembretes",
+          isLoading: false,
+          onPressed: () {
+          },
+        )
       ],
     );
   }

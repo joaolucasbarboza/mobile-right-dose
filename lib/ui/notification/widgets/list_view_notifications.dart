@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:tcc/ui/core/button_primary_component.dart';
 import 'package:tcc/ui/core/button_secondary_component.dart';
@@ -121,6 +122,7 @@ class ListViewNotifications extends StatelessWidget {
                                   ),
                                   Divider(),
                                   ButtonSecondaryComponent(
+                                    icon: LucideIcons.x,
                                     text: "Cancelar",
                                     isLoading: false,
                                     onPressed: () => Navigator.pop(context),
@@ -156,6 +158,7 @@ class ListViewNotifications extends StatelessWidget {
                 ),
               )
             : ButtonSecondaryComponent(
+                icon: LucideIcons.galleryVerticalEnd300,
                 text: "Ver todos os lembretes",
                 isLoading: false,
                 onPressed: () => {})
