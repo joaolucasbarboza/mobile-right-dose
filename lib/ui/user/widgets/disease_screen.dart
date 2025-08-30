@@ -165,6 +165,7 @@ class _DiseaseScreenState extends State<DiseaseScreen> {
                       },
                       isLoading: provider.isLoading,
                       text: "Próximo",
+                      icon: LucideIcons.arrowBigRight300
                     ),
                     ButtonSecondaryComponent(
                       icon: LucideIcons.house300,

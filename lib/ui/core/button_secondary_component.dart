@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class ButtonSecondaryComponent extends StatefulWidget {
   final String text;
@@ -55,7 +56,7 @@ class _ButtonSecondaryComponentState extends State<ButtonSecondaryComponent> {
           children: [
             if (widget.icon != null || widget.isLogout) ...[
               Icon(
-                widget.icon ?? Icons.logout_outlined,
+                widget.icon ?? LucideIcons.logOut300,
                 size: 22,
               ),
               const SizedBox(width: 8),

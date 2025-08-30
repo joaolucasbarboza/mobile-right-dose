@@ -167,6 +167,7 @@ class _DietaryScreenState extends State<DietaryScreen> {
                       },
                       isLoading: provider.isLoading,
                       text: "Próximo",
+                      icon: LucideIcons.arrowBigRight300,
                     ),
                     ButtonSecondaryComponent(
                       icon: LucideIcons.house300,

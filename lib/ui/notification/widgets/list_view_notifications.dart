@@ -91,6 +91,7 @@ class ListViewNotifications extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 8),
                                   ButtonPrimaryComponent(
+                                    icon: LucideIcons.syringe300,
                                     text: "Tomar medicação",
                                     isLoading: updateStatusNotifier.isLoading,
                                     onPressed: () async {

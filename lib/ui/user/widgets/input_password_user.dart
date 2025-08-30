@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:tcc/ui/core/input_component.dart';
 
 class InputPasswordUser extends StatefulWidget {
@@ -19,7 +20,7 @@ class _InputPasswordUserState extends State<InputPasswordUser> {
       controller: widget.controller,
       hint: "Digite sua senha",
       label: "Senha",
-      prefixIcon: Icons.lock_outline,
+      prefixIcon: LucideIcons.keyRound500,
       keyboardType: TextInputType.visiblePassword,
       obscureText: _isObscure,
       suffixIcon: IconButton(
@@ -30,8 +31,8 @@ class _InputPasswordUserState extends State<InputPasswordUser> {
         },
         icon: Icon(
           _isObscure
-              ? Icons.visibility_outlined
-              : Icons.visibility_off_outlined,
+              ? LucideIcons.eye400
+              : LucideIcons.eyeClosed400,
         ),
       ),
       validator: (password) {

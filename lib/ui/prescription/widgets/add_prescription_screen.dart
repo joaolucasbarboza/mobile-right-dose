@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:tcc/ui/core/button_primary_component.dart';
 import 'package:tcc/ui/core/dropdown_component.dart';
@@ -324,6 +325,7 @@ class _AddPrescriptionScreenState extends State<AddPrescriptionScreen> {
                 ],
               ),
               ButtonPrimaryComponent(
+                icon: LucideIcons.send300,
                 onPressed: _submitForm,
                 isLoading: false,
                 text: "Salvar Prescrição",

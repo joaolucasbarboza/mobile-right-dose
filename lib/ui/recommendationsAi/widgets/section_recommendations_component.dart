@@ -174,6 +174,7 @@ class _MealsList extends StatelessWidget {
           }).toList(),
         ),
         ButtonPrimaryComponent(
+          icon: LucideIcons.receiptText300,
           text: "Ver detalhes",
           isLoading: false,
           onPressed: () {

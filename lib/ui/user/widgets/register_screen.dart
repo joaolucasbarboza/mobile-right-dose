@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:tcc/ui/core/button_primary_component.dart';
 import 'package:tcc/ui/core/input_component.dart';
@@ -48,7 +49,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     controller: provider.nameController,
                     label: "Nome completo",
                     hint: "Digite seu nome",
-                    prefixIcon: Icons.account_circle_outlined,
+                    prefixIcon: LucideIcons.user500,
                     obscureText: false,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -72,6 +73,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               },
               isLoading: provider.isLoading,
               text: "Criar conta",
+              icon: LucideIcons.userPlus300,
             ),
           ],
         ),

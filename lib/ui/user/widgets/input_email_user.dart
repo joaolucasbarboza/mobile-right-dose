@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:tcc/ui/core/input_component.dart';
 
 class InputEmailUser extends StatefulWidget {
@@ -17,7 +18,7 @@ class _InputEmailUserState extends State<InputEmailUser> {
       controller: widget.controller,
       label: "E-mail",
       hint: "nome@exemplo.com",
-      prefixIcon: Icons.mail_outline,
+      prefixIcon: LucideIcons.mailOpen500,
       keyboardType: TextInputType.emailAddress,
       validator: (email) {
         if (email == null || email.isEmpty) {

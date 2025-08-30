@@ -76,6 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(height: 24),
 
                     ButtonPrimaryComponent(
+                      icon: LucideIcons.arrowBigRight300,
                       text: "Entrar",
                       isLoading: provider.isLoading,
                       onPressed: () {
