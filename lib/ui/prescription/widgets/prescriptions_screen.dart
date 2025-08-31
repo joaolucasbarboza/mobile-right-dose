@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:tcc/ui/prescription/view_models/get_all_prescription_view_model.dart';
-import 'package:tcc/ui/prescription/widgets/add_prescription_screen.dart';
 import 'package:tcc/ui/prescription/widgets/details_prescription_screen.dart';
 import 'package:tcc/utils/custom_text_style.dart';
 import 'package:tcc/utils/format_strings.dart';
@@ -83,9 +82,7 @@ class _PrescriptionScreenState extends State<PrescriptionsScreen> {
       label: Text("Adicionar"),
         icon: Icon(LucideIcons.plus500),
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const AddPrescriptionScreen()),
-          );
+          Navigator.pushNamed(context, '/prescriptions/new');
         },
       ),
       appBar: AppBar(

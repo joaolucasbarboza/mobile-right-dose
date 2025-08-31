@@ -37,4 +37,25 @@ class PrescriptionNotificationService implements PrescriptionNotificationReposit
       throw Exception('Failed to fetch upcoming notifications: $e');
     }
   }
+
+  @override
+  Future<Map<String, dynamic>> getById(int id) async {
+    final uri = Uri.parse('${Routes.getPrescriptionNotificationById}/$id');
+
+    try {
+      final response = await _httpClient.get(uri);
+
+      if (response.statusCode == 200) {
+        final body = utf8.decode(response.bodyBytes);
+        final Map<String, dynamic> data = jsonDecode(body) as Map<String, dynamic>;
+        return data;
+      } else if (response.statusCode == 404) {
+        throw Exception('Notification $id not found (404).');
+      } else {
+        throw Exception('Failed to fetch notification by id: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch notification by id: $e');
+    }
+  }
 }

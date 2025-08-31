@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -28,21 +27,12 @@ class ListViewNotificationsWithPrescription extends StatelessWidget {
     final parentContext = context;
     final updateStatusNotifier = Provider.of<UpdateStatusNotificationViewModel>(context, listen: true);
 
-    final random = Random();
-
     return Column(
       children: [
         Column(
           children: notifications.map((notification) {
             final formattedDate = _dateFormat.format(notification.notificationTime);
             final formattedTime = _timeFormat.format(notification.notificationTime);
-
-            const confirmedStatus = 'CONFIRMED';
-
-            const sizeIcon = 28.0;
-            const spacingBetweenIconWithText = 8.0;
-
-            Color colorIcon = Colors.grey.shade800;
 
             return Column(
               children: [
@@ -52,155 +42,178 @@ class ListViewNotificationsWithPrescription extends StatelessWidget {
                   enableFeedback: true,
                   tileColor: Colors.grey.shade100,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  leading: Icon(LucideIcons.bell300, size: 28,),
-                  trailing: Icon(LucideIcons.chevronRight500),
+                  leading: const Icon(LucideIcons.bell, size: 28),
+                  trailing: const Icon(LucideIcons.chevronRight),
                   title: Text(
                     '${notification.medicineName} - ${notification.dosageAmount} ${notification.dosageUnit}',
-                    style: TextStyle(color: Colors.grey.shade600, fontWeight: FontWeight.w600, fontSize: 16),
+                    style: TextStyle(
+                      color: Colors.grey.shade600,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
                   ),
                   subtitle: Text(
                     '$formattedDate - $formattedTime',
                     style: customTextLabel2(),
                   ),
                   shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                      color: Colors.grey.shade300,
-                      width: 1.5,
-                    ),
+                    side: BorderSide(color: Colors.grey.shade300, width: 1.5),
                     borderRadius: BorderRadius.circular(18),
                   ),
-                  onTap: () => {
-                    showModalBottomSheet(
-                      context: context,
-                      useSafeArea: false,
-                      builder: (BuildContext context) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 24),
-                          child: SizedBox(
-                            width: double.infinity,
-                            child: Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                spacing: 10,
-                                children: [
-                                  Text(
-                                    'Detalhes do lembrete',
-                                    style: customTextTitleSecondaryBlack(),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    spacing: 10,
-                                    children: [
-                                      Row(
-                                        spacing: spacingBetweenIconWithText,
-                                        children: [
-                                          Icon(
-                                            Icons.medical_information_outlined,
-                                            size: sizeIcon,
-                                            color: colorIcon,
-                                          ),
-                                          Text("Medicamento: ${notification.medicineName}", style: customTextLabel(),)
-                                        ],
-                                      ),
-                                      Row(
-                                        spacing: spacingBetweenIconWithText,
-                                        children: [
-                                          Icon(
-                                            Icons.medication_outlined,
-                                            size: sizeIcon,
-                                            color: colorIcon,
-                                          ),
-                                          Text("Dosagem: ${notification.dosageAmount} ${notification.dosageUnit}", style: customTextLabel()),
-                                        ],
-                                      ),
-                                      Row(
-                                        spacing: spacingBetweenIconWithText,
-                                        children: [
-                                          Icon(
-                                            Icons.calendar_today_outlined,
-                                            size: sizeIcon,
-                                            color: colorIcon,
-                                          ),
-                                          Text(
-                                            'Data: $formattedDate',
-                                            style: customTextLabel(),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        spacing: spacingBetweenIconWithText,
-                                        children: [
-                                          Icon(
-                                            Icons.access_time_outlined,
-                                            size: sizeIcon,
-                                            color: colorIcon,
-                                          ),
-                                          Text(
-                                            'Horário: $formattedTime',
-                                            style: customTextLabel(),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        spacing: spacingBetweenIconWithText,
-                                        children: [
-                                          Icon(
-                                            Icons.check_circle_outline,
-                                            size: sizeIcon,
-                                            color: colorIcon,
-                                          ),
-                                          Text(
-                                            'Status: ${notification.status.name}',
-                                            style: customTextLabel(),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                  ButtonPrimaryComponent(
-                                    icon: LucideIcons.syringe300,
-                                    text: "Tomar medicação",
-                                    isLoading: updateStatusNotifier.isLoading,
-                                    onPressed: () async {
-                                      int response = await updateStatusNotifier.updateStatusNotification(
-                                        parentContext,
-                                        notification.id!,
-                                        confirmedStatus,
-                                      );
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        useSafeArea: true,
+                        isScrollControlled: true, // necessário para permitir o sheet expansível
+                        backgroundColor: Colors.transparent, // bordas arredondadas no container interno
+                        builder: (context) {
+                          final status = "PENDING"; // ex.: PENDING, CONFIRMED, CANCELLED
+                          Color statusColor;
+                          IconData statusIcon;
+                          switch (status) {
+                            case 'CONFIRMED':
+                              statusColor = Colors.green;
+                              statusIcon = LucideIcons.check;
+                              break;
+                            case 'CANCELLED':
+                              statusColor = Colors.red;
+                              statusIcon = LucideIcons.x;
+                              break;
+                            default:
+                              statusColor = Colors.amber;
+                              statusIcon = LucideIcons.clockFading500;
+                          }
 
-                                      if (response == HttpStatus.ok) {
-                                        Navigator.pop(context);
-
-                                        if (context.mounted) {
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            const SnackBar(
-                                              behavior: SnackBarBehavior.floating,
-                                              duration: Duration(seconds: 2),
-                                              content: Text('Status atualizado com sucesso!'),
-                                              backgroundColor: Colors.green,
+                          return DraggableScrollableSheet(
+                            minChildSize: 0.65,
+                            expand: true,
+                            initialChildSize: 0.66,
+                            maxChildSize: 0.68,
+                            builder: (context, scrollController) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.surface,
+                                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                                  boxShadow: const [
+                                    BoxShadow(blurRadius: 12, color: Colors.black26, offset: Offset(0, -2)),
+                                  ],
+                                ),
+                                child: Column(
+                                  children: [
+                                    // Handle
+                                    const SizedBox(height: 8),
+                                    Container(
+                                      width: 40, height: 4,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black26, borderRadius: BorderRadius.circular(99),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Expanded(
+                                      child: ListView(
+                                        controller: scrollController,
+                                        padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+                                        children: [
+                                          ListTile(
+                                            contentPadding: EdgeInsets.zero,
+                                            leading: const Icon(LucideIcons.pill600),
+                                            title: Text(
+                                              notification.medicineName!,
+                                              style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w700),
                                             ),
-                                          );
-                                        }
-                                      }
-                                    },
-                                  ),
-                                  Divider(),
-                                  ButtonSecondaryComponent(
-                                    text: "Cancelar",
-                                    isLoading: false,
-                                    onPressed: () => Navigator.pop(context),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    )
-                  },
+                                          ),
+                                          const SizedBox(height: 8),
+
+                                          Material(
+                                            borderRadius: BorderRadius.circular(12),
+                                            child: Column(
+                                              children: ListTile.divideTiles(
+                                                color: Theme.of(context).dividerColor,
+                                                tiles: [
+                                                  ListTile(
+                                                    leading: const Icon(LucideIcons.calendar600),
+                                                    title: const Text('Data'),
+                                                    subtitle: Text(formattedDate, style: customTextLabel2()),
+                                                  ),
+                                                  ListTile(
+                                                    leading: const Icon(LucideIcons.timer600),
+                                                    title: const Text('Horário'),
+                                                    subtitle: Text(formattedTime, style: customTextLabel2()),
+                                                  ),
+                                                  ListTile(
+                                                    leading: Icon(statusIcon),
+                                                    title: const Text('Status'),
+                                                    trailing: Chip(
+                                                      backgroundColor: statusColor.withOpacity(0.12),
+                                                      side: BorderSide(color: statusColor.withOpacity(0.5)),
+                                                      label: Text(
+                                                        "PENDENTE",
+                                                        style: TextStyle(color: statusColor, fontWeight: FontWeight.w600),
+                                                      ),
+                                                      avatar: Icon(statusIcon, color: statusColor, size: 18),
+                                                    ),
+                                                  ),
+                                                  ListTile(
+                                                    leading: const Icon(LucideIcons.syringe600),
+                                                    title: const Text('Dosagem'),
+                                                    subtitle: Text(
+                                                      '${notification.dosageAmount} ${notification.dosageUnit}',
+                                                      style: customTextLabel2(),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ).toList(),
+                                            ),
+                                          ),
+
+                                          const SizedBox(height: 16),
+
+                                          // Ações
+                                          ButtonPrimaryComponent(
+                                            icon: LucideIcons.check600,
+                                            text: "Tomar medicação",
+                                            isLoading: updateStatusNotifier.isLoading,
+                                            onPressed: () async {
+                                              const confirmedStatus = 'CONFIRMED';
+                                              final resp = await updateStatusNotifier.updateStatusNotification(
+                                                parentContext,
+                                                notification.id!,
+                                                confirmedStatus,
+                                              );
+
+                                              if (resp == HttpStatus.ok) {
+                                                if (context.mounted) Navigator.pop(context);
+                                                if (context.mounted) {
+                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                    const SnackBar(
+                                                      behavior: SnackBarBehavior.floating,
+                                                      duration: Duration(seconds: 2),
+                                                      content: Text('Status atualizado com sucesso!'),
+                                                      backgroundColor: Colors.green,
+                                                    ),
+                                                  );
+                                                }
+                                              }
+                                            },
+                                          ),
+                                          const SizedBox(height: 8),
+                                          ButtonSecondaryComponent(
+                                            icon: LucideIcons.x,
+                                            text: "Cancelar",
+                                            isLoading: false,
+                                            onPressed: () => Navigator.pop(context),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      );
+                    }
                 ),
                 const SizedBox(height: 10),
               ],
@@ -211,14 +224,10 @@ class ListViewNotificationsWithPrescription extends StatelessWidget {
             ? Container(
           alignment: Alignment.center,
           height: 120,
-          child: Column(
+          child: const Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Icon(
-                Icons.notifications_off_outlined,
-                size: 40,
-                color: Colors.grey,
-              ),
+            children: [
+              Icon(Icons.notifications_off_outlined, size: 40, color: Colors.grey),
               Text("Nenhum lembrete encontrado"),
             ],
           ),
@@ -228,8 +237,9 @@ class ListViewNotificationsWithPrescription extends StatelessWidget {
           text: "Ver todos os lembretes",
           isLoading: false,
           onPressed: () {
+            // TODO: abrir página/lista completa
           },
-        )
+        ),
       ],
     );
   }

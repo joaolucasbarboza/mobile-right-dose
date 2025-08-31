@@ -10,6 +10,8 @@ class Prescription {
   String uomFrequency;
   bool indefinite;
   int totalOccurrences;
+  int totalConfirmed; // <- aqui é int
+  int totalPending;   // <- aqui é int
   DateTime startDate;
   DateTime endDate;
   bool wantsNotifications;
@@ -25,6 +27,8 @@ class Prescription {
     required this.uomFrequency,
     required this.indefinite,
     required this.totalOccurrences,
+    required this.totalConfirmed,
+    required this.totalPending,
     required this.startDate,
     required this.endDate,
     required this.wantsNotifications,
@@ -36,16 +40,18 @@ class Prescription {
     return Prescription(
       id: map['id'],
       medicine: Medicine.fromMap(map['medicine']),
-      dosageAmount: map['dosageAmount'],
+      dosageAmount: (map['dosageAmount'] as num).toDouble(),
       dosageUnit: map['dosageUnit']?.toString() ?? '',
       frequency: map['frequency'],
       uomFrequency: map['uomFrequency'],
       indefinite: map['indefinite'] ?? false,
       totalOccurrences: map['totalOccurrences'] ?? 0,
+      totalConfirmed: (map['totalConfirmed'] as num?)?.toInt() ?? 0,
+      totalPending: (map['totalPending'] as num?)?.toInt() ?? 0,
       startDate: DateTime.parse(map['startDate']),
-      endDate: map['endDate'] != null ? DateTime.parse(map['endDate']) : DateTime.now(), // Corrigido aqui
+      endDate: map['endDate'] != null ? DateTime.parse(map['endDate']) : DateTime.now(),
       wantsNotifications: map['wantsNotifications'],
-      instructions: map['instructions']?.toString() ?? '',
+      instructions: map['instructions']?.toString(),
       notifications: (map['notifications'] as List<dynamic>?)
           ?.map((n) => PrescriptionNotification.fromMap(n as Map<String, dynamic>))
           .toList() ??
@@ -60,8 +66,11 @@ class Prescription {
       'dosageUnit': dosageUnit,
       'frequency': frequency,
       'uomFrequency': uomFrequency,
-      'totalOcurrences': totalOccurrences,
+      'totalOccurrences': totalOccurrences,
+      'totalConfirmed': totalConfirmed,
+      'totalPending': totalPending,
       'startDate': startDate.toIso8601String(),
+      'endDate': endDate.toIso8601String(),
       'wantsNotifications': wantsNotifications,
       'instructions': instructions,
     };

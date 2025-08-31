@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tcc/utils/custom_text_style.dart';
 
 class CardInfoPrescription extends StatelessWidget {
   final Icon icon;
@@ -26,24 +25,25 @@ class CardInfoPrescription extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
+          spacing: 18,
           children: [
             icon,
-            const SizedBox(width: 10),
             Expanded(
               child: Column(
+                spacing: 4,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     primaryLabel,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
-                    style: customTextLabelPrimary(),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey.shade800),
                   ),
                   Text(
                     secondaryLabel,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
-                    style: customTextLabelPrimary(),
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey.shade800),
                   ),
                 ],
               ),

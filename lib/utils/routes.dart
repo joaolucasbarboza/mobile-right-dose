@@ -20,8 +20,8 @@ class Routes {
   static const getAllDietaries = "$apiUrl/user-dietary-restrictions";
 
   static const getAllUpcomingNotifications = "$apiUrl/prescriptions-notifications/upcoming-notifications";
-
   static const updatePrescriptionStatus = "$apiUrl/prescriptions-notifications/update-status";
+  static const getPrescriptionNotificationById = "$apiUrl/prescriptions-notifications";
 
   static const generateRecommendation = "$apiUrl/generate-ai";
 

@@ -63,12 +63,9 @@ class _DetailsPrescriptionScreenState extends State<DetailsPrescriptionScreen> {
           ? const Center(child: CircularProgressIndicator())
           : provider.prescription == null
           ? const Center(child: Text("Prescrição não encontrada"))
-          : Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: TextDetailsPrescriptionComponent(
-          prescription: provider.prescription!,
-        ),
-      ),
+          : TextDetailsPrescriptionComponent(
+            prescription: provider.prescription!,
+          ),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,10 +16,13 @@ import 'package:tcc/data/services/user_service.dart';
 import 'package:tcc/ui/core/navigationBar.dart';
 import 'package:tcc/ui/medicine/view_models/get_all_medicine_view_model.dart';
 import 'package:tcc/ui/notification/view_models/get_all_upcoming_notifications_view_model.dart';
+import 'package:tcc/ui/notification/view_models/get_by_id_prescription_notification_view_model.dart';
 import 'package:tcc/ui/prescription/view_models/add_prescription_view_model.dart';
 import 'package:tcc/ui/prescription/view_models/get_all_prescription_view_model.dart';
 import 'package:tcc/ui/prescription/view_models/get_by_id_view_model.dart';
 import 'package:tcc/ui/prescription/view_models/update_status_notification_view_model.dart';
+import 'package:tcc/ui/prescription/widgets/steps/add_prescription_wizard_model.dart';
+import 'package:tcc/ui/prescription/widgets/steps/add_prescription_wizard_screen.dart';
 import 'package:tcc/ui/recommendationsAi/view_model/generate_ai_view_model.dart';
 import 'package:tcc/ui/user/view_models/create_health_view_model.dart';
 import 'package:tcc/ui/user/view_models/get_user_disease_view_model.dart';
@@ -31,6 +35,7 @@ import 'package:tcc/ui/user/widgets/register_screen.dart';
 import 'package:tcc/utils/navigator_service.dart';
 
 import 'data/services/health_service.dart';
+import 'data/services/notification_sheet_route.dart';
 import 'data/services/prescription_notifications_service.dart';
 import 'firebase_options.dart';
 
@@ -56,10 +61,22 @@ void main() async {
   await _initFirebaseAndNotifications();
   final isLoggedIn = await _hasToken();
 
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('pt_BR', null);
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthService>(create: (_) => AuthService()),
+        // NEW: estado único do wizard de prescrição
+        ChangeNotifierProvider<AddPrescriptionWizardModel>(
+          create: (_) => AddPrescriptionWizardModel(),
+        ),
+        ChangeNotifierProvider<GetNotificationByIdViewModel>(
+          create: (context) => GetNotificationByIdViewModel(
+            PrescriptionNotificationService(context.read<AuthService>()),
+          ),
+        ),
         ChangeNotifierProvider<GetAllPrescriptionViewModel>(
           create: (context) => GetAllPrescriptionViewModel(
             PrescriptionService(context.read<AuthService>()),
@@ -135,6 +152,8 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const NavigationComponent(),
         '/register': (context) => const RegisterScreen(),
         '/forgot-password': (context) => const ForgotPasswordScreen(),
+        '/prescriptions/new': (context) => const AddPrescriptionWizardScreen(),
+        '/notification-sheet': (_) => const NotificationSheetRoute(),
       },
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
