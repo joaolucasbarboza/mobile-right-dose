@@ -9,10 +9,10 @@ import 'package:tcc/ui/recommendationsAi/widgets/section_recommendations_compone
 import 'package:tcc/ui/user/view_models/get_user_view_model.dart';
 import 'package:tcc/ui/user/widgets/profile_screen.dart';
 import 'package:tcc/ui/notification/view_models/get_all_upcoming_notifications_view_model.dart';
-import 'package:tcc/data/services/recommendation_service.dart';
 import 'package:tcc/ui/recommendationsAi/view_model/generate_ai_view_model.dart';
 
 import '../../data/services/prescription_notifications_service.dart';
+import '../../data/services/recommendation_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -42,14 +42,6 @@ class _HomeScreenState extends State<HomeScreen> {
       await _getUserViewModel.fetchUser();
       await _notifVm.fetchUpcomingNotifications();
     });
-  }
-
-  @override
-  void dispose() {
-    _recVm.dispose();
-    _notifVm.dispose();
-    _getUserViewModel.dispose();
-    super.dispose();
   }
 
   @override

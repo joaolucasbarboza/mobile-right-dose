@@ -14,7 +14,7 @@ import '../../prescription/view_models/update_status_notification_view_model.dar
 class ListViewNotificationsWithPrescription extends StatelessWidget {
   final List<PrescriptionNotification> notifications;
 
-  static final _dateFormat = DateFormat('dd/MM/yyyy');
+  static final _dateFormat = DateFormat('dd/MM');
   static final _timeFormat = DateFormat('HH:mm');
 
   const ListViewNotificationsWithPrescription({
@@ -41,11 +41,16 @@ class ListViewNotificationsWithPrescription extends StatelessWidget {
                   minVerticalPadding: 16,
                   enableFeedback: true,
                   tileColor: Colors.grey.shade100,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  leading: const Icon(LucideIcons.bell, size: 28),
+                  leading: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(formattedDate, style: TextStyle(fontSize: 14, color: Colors.grey.shade600),),
+                      Text(formattedTime, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),)
+                    ],
+                  ),
                   trailing: const Icon(LucideIcons.chevronRight),
                   title: Text(
-                    '${notification.medicineName} - ${notification.dosageAmount} ${notification.dosageUnit}',
+                    '${notification.medicineName}',
                     style: TextStyle(
                       color: Colors.grey.shade600,
                       fontWeight: FontWeight.w600,
@@ -53,8 +58,7 @@ class ListViewNotificationsWithPrescription extends StatelessWidget {
                     ),
                   ),
                   subtitle: Text(
-                    '$formattedDate - $formattedTime',
-                    style: customTextLabel2(),
+                      '${notification.dosageAmount} ${notification.dosageUnit}'
                   ),
                   shape: RoundedRectangleBorder(
                     side: BorderSide(color: Colors.grey.shade300, width: 1.5),
@@ -64,10 +68,10 @@ class ListViewNotificationsWithPrescription extends StatelessWidget {
                       showModalBottomSheet(
                         context: context,
                         useSafeArea: true,
-                        isScrollControlled: true, // necessário para permitir o sheet expansível
-                        backgroundColor: Colors.transparent, // bordas arredondadas no container interno
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
                         builder: (context) {
-                          final status = "PENDING"; // ex.: PENDING, CONFIRMED, CANCELLED
+                          final status = "PENDING";
                           Color statusColor;
                           IconData statusIcon;
                           switch (status) {

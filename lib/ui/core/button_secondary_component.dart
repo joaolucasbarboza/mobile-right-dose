@@ -7,7 +7,7 @@ class ButtonSecondaryComponent extends StatefulWidget {
   final bool isLoading;
   final VoidCallback onPressed;
   final bool isLogout;
-  final IconData? icon; // <- pode ser nulo
+  final IconData? icon;
 
   const ButtonSecondaryComponent({
     super.key,

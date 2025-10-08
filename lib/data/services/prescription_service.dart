@@ -89,4 +89,35 @@ class PrescriptionService implements PrescriptionRepository {
       );
     }
   }
+
+  @override
+  Future<void> deleteByIdPrescription(int id) {
+    final String deleteByIdUrl = Routes.deleteByIdPrescription;
+
+    final url = Uri.parse('$deleteByIdUrl/$id');
+
+    return _httpClient.delete(url).then((response) {
+      if (response.statusCode != 204) {
+        throw Exception(
+          'Failed to delete prescription: ${response.statusCode}',
+        );
+      }
+    });
+  }
+
+  @override
+  Future<void> changeWantsNotifications(int id) async {
+    final String changeWantsNotificationsUrl =
+        Routes.getPrescription;
+
+    final url = Uri.parse('$changeWantsNotificationsUrl/$id/wants-notification');
+
+    final response = await _httpClient.patch(url);
+
+    if (response.statusCode != 200) {
+      throw Exception(
+        'Failed to change wants notifications: ${response.statusCode}',
+      );
+    }
+  }
 }

@@ -140,6 +140,7 @@ class Step2Frequency extends StatelessWidget {
               decoration: InputDecoration(
                 labelText: "Frequência",
                 hintText: "Toque para escolher",
+                helperText: "Qual a frequência que você irá tomar o medicamento?",
                 prefixIcon: const Icon(Icons.schedule),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),

@@ -6,4 +6,6 @@ abstract class PrescriptionRepository {
   Future<void> addPrescription(Map<String, dynamic> prescriptionData);
   Future<Prescription> getById(int id);
   Future<PrescriptionNotification> updateStatus(int id, String status);
+  Future<void> deleteByIdPrescription(int id);
+  Future<void> changeWantsNotifications(int id);
 }

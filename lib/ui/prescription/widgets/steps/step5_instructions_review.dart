@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:tcc/utils/enums.dart';
 
 import '../../../../utils/custom_text_style.dart';
 import '../../../core/input_component.dart';
@@ -21,14 +22,15 @@ class Step5InstructionsReview extends StatelessWidget {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
-        spacing: 16,
+        spacing: 22,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("Instruções e Notificações", style: customTextTitle()),
           InputComponent(
             controller: instrCtrl,
-            label: "Escreva aqui... (Opicional)",
-            hint: "Ex: Tomar após o café",
+            label: "Instruções extras... (Opicional)",
+            hint: "Ex: Tomar após o café...",
+            helperText: "Ex: Tomar sempre após comer algo",
             prefixIcon: Icons.note_alt_outlined,
             obscureText: false,
             validator: (_) => null,
@@ -37,7 +39,7 @@ class Step5InstructionsReview extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Receber notificações?", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 18)),
+              Text("Deseja receber notificações?", style: const TextStyle(fontSize: 18),),
               Switch(
                 value: m.wantsNotifications,
                 onChanged: (v) => context.read<AddPrescriptionWizardModel>().setWantsNotifications(v),
@@ -58,13 +60,14 @@ class Step5InstructionsReview extends StatelessWidget {
             height: 2,
             indent: 0,
           ),
-          _kv("Dosagem", m.dosageAmount != null && m.dosageUnit != null ? "${m.dosageAmount} ${m.dosageUnit}" : "-"),
+          _kv("Dosagem", m.dosageAmount != null && m.dosageUnit != null ? "${m.dosageAmount} "
+              "${getDosageUnitLabel(m.dosageUnit)}" : "-"),
           Divider(
             color: colorDivider,
             height: 2,
             indent: 0,
           ),
-          _kv("Frequência", m.frequency != null && m.uomFrequency != null ? "${m.frequency} ${m.uomFrequency}" : "-"),
+          _kv("Frequência", m.frequency != null && m.uomFrequency != null ? "A cada ${m.frequency} ${getUomFrequencyLabel(m.uomFrequency)}" : "-"),
           Divider(
             color: colorDivider,
             height: 2,
@@ -82,7 +85,7 @@ class Step5InstructionsReview extends StatelessWidget {
             height: 2,
             indent: 0,
           ),
-          if (!m.indefinite) _kv("Total de vezes", m.totalOccurrences?.toString() ?? "-"),
+          _kv("Total de vezes", m.totalOccurrences?.toString() ?? "Não possui um total definido"),
           Divider(
             color: colorDivider,
             height: 2,
@@ -106,9 +109,10 @@ class Step5InstructionsReview extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(k, style: const TextStyle(fontWeight: FontWeight.w600)),
+        Text(k, style: const TextStyle(fontWeight: FontWeight.w500)),
         Flexible(child: Text(v, textAlign: TextAlign.right)),
       ],
     );
   }
 }
+

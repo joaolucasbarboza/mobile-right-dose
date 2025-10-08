@@ -156,7 +156,6 @@ class _AddPrescriptionWizardScreenState extends State<AddPrescriptionWizardScree
                       isLoading: false,
                       onPressed: () {
                         FocusScope.of(context).unfocus();
-
                         _goNext(context);
                       },
                     ),

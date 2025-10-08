@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:tcc/models/prescription.dart';
-import 'package:tcc/models/prescription_notification.dart';
+import 'package:tcc/ui/prescription/view_models/change_wants_notifications_view_model.dart';
 import 'package:tcc/ui/prescription/widgets/card_info_prescription.dart';
 import 'package:tcc/ui/prescription/widgets/history_notifications.dart';
 import 'package:tcc/ui/notification/widgets/list_view_notifications.dart';
 import 'package:tcc/utils/custom_text_style.dart';
 import 'package:tcc/utils/format_strings.dart';
 
-class TextDetailsPrescriptionComponent extends StatelessWidget {
+class TextDetailsPrescriptionComponent extends StatefulWidget {
   final Prescription prescription;
 
   static final _dateFormat = DateFormat('dd/MM/yyyy');
@@ -21,15 +22,39 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
   });
 
   @override
+  State<TextDetailsPrescriptionComponent> createState() => _TextDetailsPrescriptionComponentState();
+
+  static String formatLowerCase(String text) {
+    return labelStatus(text).toLowerCase().replaceAll('_', ' ');
+  }
+
+  static String labelStatus(String status) {
+    switch (status.toUpperCase()) {
+      case 'CONFIRMED':
+        return 'Confirmada';
+      case 'PENDING':
+        return 'Pendente';
+      case 'CANCELLED':
+        return 'Cancelada';
+      default:
+        return 'Desconhecida';
+    }
+  }
+}
+
+class _TextDetailsPrescriptionComponentState extends State<TextDetailsPrescriptionComponent> {
+  @override
   Widget build(BuildContext context) {
-    final p = prescription;
+    final provider = Provider.of<ChangeWantsNotificationsViewModel>(context, listen: false);
+
+    final p = widget.prescription;
     final dosageAmount = p.dosageAmount.toString();
     final dosageUnit = p.dosageUnit;
     final uomFrequency = p.uomFrequency;
     final frequency = p.frequency.toString();
     final totalOccurrences = p.totalOccurrences.toString();
-    final startDate = _dateFormat.format(p.startDate);
-    final endDate = _dateFormat.format(p.endDate);
+    final startDate = TextDetailsPrescriptionComponent._dateFormat.format(p.startDate);
+    final endDate = TextDetailsPrescriptionComponent._dateFormat.format(p.endDate);
     final indefinite = p.indefinite;
     final instructions = p.instructions?.toString() ?? '';
     final wantsNotifications = p.wantsNotifications;
@@ -119,7 +144,7 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
               children: [
                 Icon(
                   LucideIcons.info,
-                  size: _sizeIcon,
+                  size: TextDetailsPrescriptionComponent._sizeIcon,
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,7 +181,7 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
               children: [
                 Icon(
                   LucideIcons.bellRing,
-                  size: _sizeIcon,
+                  size: TextDetailsPrescriptionComponent._sizeIcon,
                 ),
                 Expanded(
                   child: Column(
@@ -173,7 +198,12 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
                 Switch(
                   activeColor: Colors.green,
                   value: wantsNotifications,
-                  onChanged: (_) {},
+                  onChanged: (prescription) {
+                    provider.changeWantsNotifications(widget.prescription.id);
+                    setState(() {
+                      widget.prescription.wantsNotifications = prescription;
+                    });
+                  },
                 ),
               ],
             ),
@@ -208,27 +238,10 @@ class TextDetailsPrescriptionComponent extends StatelessWidget {
             SizedBox(
               height: 8,
             ),
-            ListViewNotifications(notifications: p.notifications, prescription: prescription,),
+            ListViewNotifications(notifications: p.notifications, prescription: widget.prescription,),
           ],
         ),
       ),
     );
-  }
-
-  static String formatLowerCase(String text) {
-    return labelStatus(text).toLowerCase().replaceAll('_', ' ');
-  }
-
-  static String labelStatus(String status) {
-    switch (status.toUpperCase()) {
-      case 'CONFIRMED':
-        return 'Confirmada';
-      case 'PENDING':
-        return 'Pendente';
-      case 'CANCELLED':
-        return 'Cancelada';
-      default:
-        return 'Desconhecida';
-    }
   }
 }

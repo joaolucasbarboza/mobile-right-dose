@@ -1,14 +1,14 @@
 import 'package:intl/intl.dart';
 
 class Medicine {
-  int? id;
+  int id;
   String name;
   String description;
   DateTime createdAt;
   DateTime? updatedAt;
 
   Medicine({
-    this.id,
+    required this.id,
     required this.name,
     required this.description,
     required this.createdAt,

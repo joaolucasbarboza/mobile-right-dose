@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../utils/custom_text_style.dart';
@@ -16,43 +17,38 @@ class Step3StartDate extends StatelessWidget {
   }) async {
     await showCupertinoModalPopup(
       context: context,
-      builder: (_) =>
-          Container(
-            height: 320,
-            color: Theme
-                .of(context)
-                .colorScheme
-                .surface,
-            child: Column(
-              children: [
-                // barra de ações
-                SizedBox(
-                  height: 48,
-                  child: Row(
-                    children: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text("Cancelar"),
-                      ),
-                      const Spacer(),
-                      TextButton(
-                        onPressed: () {
-                          onConfirm();
-                          Navigator.pop(context);
-                        },
-                        child: const Text("Concluir", style: TextStyle(fontWeight: FontWeight.w700)),
-                      ),
-                    ],
+      builder: (_) => Container(
+        height: 320,
+        color: Theme.of(context).colorScheme.surface,
+        child: Column(
+          children: [
+            // barra de ações
+            SizedBox(
+              height: 48,
+              child: Row(
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text("Cancelar"),
                   ),
-                ),
-                const Divider(height: 1),
-                Expanded(child: picker),
-              ],
+                  const Spacer(),
+                  TextButton(
+                    onPressed: () {
+                      onConfirm();
+                      Navigator.pop(context);
+                    },
+                    child: const Text("Concluir", style: TextStyle(fontWeight: FontWeight.w700)),
+                  ),
+                ],
+              ),
             ),
-          ),
+            const Divider(height: 1),
+            Expanded(child: picker),
+          ],
+        ),
+      ),
     );
   }
-
 
   Future<void> _pickDateCupertino(BuildContext context) async {
     final model = context.read<AddPrescriptionWizardModel>();
@@ -103,18 +99,21 @@ class Step3StartDate extends StatelessWidget {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
-        spacing: 16,
+        spacing: 28,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("Início do tratamento", style: customTextTitle()),
-
           GestureDetector(
             onTap: () => _pickDateCupertino(context),
             child: InputDecorator(
               decoration: InputDecoration(
                 labelText: "Data de início",
                 hintText: "Selecione",
-                prefixIcon: const Icon(Icons.calendar_today_outlined),
+                helperText: "Qual a data que você irá começar a tomar?",
+                prefixIcon: const Icon(
+                  LucideIcons.calendar500,
+                  size: 28,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(width: 1.5, color: Colors.grey.shade200),
@@ -132,19 +131,22 @@ class Step3StartDate extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Text(
                   dateText,
-                  style: hasValue ? customTextLabel() : TextStyle(color: Colors.grey.shade500),
+                  style: TextStyle(color: Colors.black, fontSize: 18),
                 ),
               ),
             ),
           ),
-
           GestureDetector(
             onTap: () => _pickTimeCupertino(context),
             child: InputDecorator(
               decoration: InputDecoration(
-                labelText: "Hora de início",
+                labelText: "Horarío",
                 hintText: "Selecione",
-                prefixIcon: const Icon(Icons.access_time),
+                helperText: "Qual o horário?",
+                prefixIcon: const Icon(
+                  LucideIcons.clock2500,
+                  size: 28,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(width: 1.5, color: Colors.grey.shade200),
@@ -162,7 +164,7 @@ class Step3StartDate extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Text(
                   timeText,
-                  style: hasValue ? customTextLabel() : TextStyle(color: Colors.grey.shade500),
+                  style: TextStyle(color: Colors.black, fontSize: 18),
                 ),
               ),
             ),

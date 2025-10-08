@@ -18,9 +18,12 @@ import 'package:tcc/ui/medicine/view_models/get_all_medicine_view_model.dart';
 import 'package:tcc/ui/notification/view_models/get_all_upcoming_notifications_view_model.dart';
 import 'package:tcc/ui/notification/view_models/get_by_id_prescription_notification_view_model.dart';
 import 'package:tcc/ui/prescription/view_models/add_prescription_view_model.dart';
+import 'package:tcc/ui/prescription/view_models/change_wants_notifications_view_model.dart';
+import 'package:tcc/ui/prescription/view_models/delete_by_id_prescription_view_model.dart';
 import 'package:tcc/ui/prescription/view_models/get_all_prescription_view_model.dart';
 import 'package:tcc/ui/prescription/view_models/get_by_id_view_model.dart';
 import 'package:tcc/ui/prescription/view_models/update_status_notification_view_model.dart';
+import 'package:tcc/ui/prescription/widgets/prescriptions_screen.dart';
 import 'package:tcc/ui/prescription/widgets/steps/add_prescription_wizard_model.dart';
 import 'package:tcc/ui/prescription/widgets/steps/add_prescription_wizard_screen.dart';
 import 'package:tcc/ui/recommendationsAi/view_model/generate_ai_view_model.dart';
@@ -68,9 +71,13 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthService>(create: (_) => AuthService()),
-        // NEW: estado único do wizard de prescrição
         ChangeNotifierProvider<AddPrescriptionWizardModel>(
           create: (_) => AddPrescriptionWizardModel(),
+        ),
+        ChangeNotifierProvider<DeleteByIdPrescriptionViewModel>(
+          create: (context) => DeleteByIdPrescriptionViewModel(
+            PrescriptionService(context.read<AuthService>()),
+          ),
         ),
         ChangeNotifierProvider<GetNotificationByIdViewModel>(
           create: (context) => GetNotificationByIdViewModel(
@@ -79,6 +86,11 @@ void main() async {
         ),
         ChangeNotifierProvider<GetAllPrescriptionViewModel>(
           create: (context) => GetAllPrescriptionViewModel(
+            PrescriptionService(context.read<AuthService>()),
+          ),
+        ),
+        ChangeNotifierProvider<ChangeWantsNotificationsViewModel>(
+          create: (context) => ChangeWantsNotificationsViewModel(
             PrescriptionService(context.read<AuthService>()),
           ),
         ),
@@ -153,6 +165,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const RegisterScreen(),
         '/forgot-password': (context) => const ForgotPasswordScreen(),
         '/prescriptions/new': (context) => const AddPrescriptionWizardScreen(),
+        '/prescriptions': (context) => const PrescriptionsScreen(),
         '/notification-sheet': (_) => const NotificationSheetRoute(),
       },
       debugShowCheckedModeBanner: false,

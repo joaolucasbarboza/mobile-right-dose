@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../utils/custom_text_style.dart';
@@ -16,17 +17,26 @@ class Step4Duration extends StatelessWidget {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
-        spacing: 16,
+        spacing: 28,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("Tempo de uso", style: customTextTitle()),
           Row(
+            spacing: 12,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("Prescrição indefinida?", style: customTextLabel()),
+              Flexible(
+                child: Text(
+                  "Você vai tomar esse remédio por tempo indeterminado?",
+                  style: const TextStyle(fontSize: 18),
+                  softWrap: true,
+                  overflow: TextOverflow.visible,
+                ),
+              ),
               Switch(
                 value: model.indefinite,
-                onChanged: (v) => context.read<AddPrescriptionWizardModel>().setIndefinite(v),
+                onChanged: (v) =>
+                    context.read<AddPrescriptionWizardModel>().setIndefinite(v),
               ),
             ],
           ),
@@ -36,7 +46,8 @@ class Step4Duration extends StatelessWidget {
               keyboardType: TextInputType.number,
               label: "Total de vezes",
               hint: "Informe o total de vezes",
-              prefixIcon: Icons.calendar_today_outlined,
+              helperText: "Informe o quantas vezes você irá tomar o medicamento? (em dias)",
+              prefixIcon: LucideIcons.calendar500,
               obscureText: false,
               validator: (_) => null,
               onChanged: (v) => context.read<AddPrescriptionWizardModel>().setTotalOccurrences(int.tryParse(v)),

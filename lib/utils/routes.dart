@@ -1,5 +1,5 @@
 class Routes {
-  static const apiUrl = "http://192.168.0.15:8080";
+  static const apiUrl = "http://82.25.75.151:8080";
   static const authLogin = "$apiUrl/auth/login";
   static const authRegister = "$apiUrl/auth/register";
 
@@ -10,6 +10,7 @@ class Routes {
   static const getPrescription = "$apiUrl/prescriptions";
   static const getPrescriptionById = "$apiUrl/prescriptions/{id}";
   static const addPrescription = "$apiUrl/prescriptions";
+  static const deleteByIdPrescription = "$apiUrl/prescriptions";
 
   static const addDisease = "$apiUrl/user-diseases";
   static const getAllDiseases = "$apiUrl/user-diseases";

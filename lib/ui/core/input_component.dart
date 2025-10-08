@@ -8,6 +8,7 @@ class InputComponent extends StatelessWidget {
   final IconButton? suffixIcon;
   final bool obscureText;
   final TextInputType keyboardType;
+  final String? helperText;
   final String? Function(String?)? validator;
   final void Function(String)? onChanged;
 
@@ -20,6 +21,7 @@ class InputComponent extends StatelessWidget {
     this.suffixIcon,
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
+    this.helperText,
     this.validator,
     this.onChanged,
   });
@@ -35,6 +37,7 @@ class InputComponent extends StatelessWidget {
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
+        helperMaxLines: 3,
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(width: 2, color: Colors.blueAccent),
@@ -53,6 +56,7 @@ class InputComponent extends StatelessWidget {
         ),
         prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
         suffixIcon: suffixIcon,
+        helperText: helperText,
       ),
     );
   }

@@ -1,4 +1,3 @@
-// Dosage Units
 const Map<String, String> dosageUnitsMap = {
   'Miligrama': 'MILLIGRAM',
   'Micrograma': 'MICROGRAM',
@@ -18,8 +17,17 @@ const Map<String, String> dosageUnitsMap = {
   'Dose': 'DOSE',
 };
 
+String getDosageUnitLabel(String? unit) {
+  if (unit == null) return "-";
+  return dosageUnitsMap.entries.firstWhere((entry) => entry.value == unit, orElse: () => const MapEntry("-", "-")).key;
+}
 
 const Map<String, String> uomFrequencyMap = {
-  'A cada': 'DAILY',
-  'Por hora': 'HOURLY',
+  'DAILY': 'dia(s)',
+  'HOURLY': 'hora(s)',
 };
+
+String getUomFrequencyLabel(String? uom) {
+  if (uom == null) return "-";
+  return uomFrequencyMap.entries.firstWhere((entry) => entry.key == uom, orElse: () => const MapEntry("-", "-")).value;
+}
